@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentMessageMapper">
+
+  <sql id="Base_Column_List">
+       id, agent_id, agent_name, title, content, notice_type, send_target, customer_ids, state, remark, version, create_time,
+        update_time
+  </sql>
+  <sql id="Blob_Column_List">
+    message
+  </sql>
+
+  <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.AgentMessage">
+    insert into notice (id, agent_id, agent_name, title, content, notice_type, send_target, customer_ids, state, remark, version, create_time, update_time)
+    values (#{id},#{agentId},(select company_name from agent where id = #{agentId}),#{title},#{content}, #{noticeType}, #{sendTarget}, #{customerIds}, #{state}, #{remark}, 0, now(), now())
+  </insert>
+
+  <select id="countByCreatorWithinSeconds" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT count(0)
+        from notice
+        where agent_id=#{agentId} and TIMESTAMPDIFF(SECOND,create_time,NOW()) &lt; #{seconds,jdbcType=BIGINT}
+    </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cc.oem.modules.agent.entity.AgentMessage">
+    select
+    <include refid="Base_Column_List" />
+    from notice
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from notice
+    where id = #{id}
+  </delete>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.AgentMessage">
+    update notice
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="auditState != null">
+        audit_state = #{auditState,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="auditSysUserId != null">
+        audit_sys_user_id = #{auditSysUserId,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditRemark != null">
+        audit_remark = #{auditRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AgentMessage">
+    update agent_message
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      audit_state = #{auditState,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      updater = #{updater,jdbcType=VARCHAR},
+      agent_id = #{agentId,jdbcType=BIGINT},
+      audit_sys_user_id = #{auditSysUserId,jdbcType=BIGINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_remark = #{auditRemark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="queryAgentMessageList"
+          parameterType="com.cc.oem.modules.agent.model.param.MessageInfoParam"
+          resultType="com.cc.oem.modules.agent.model.data.MessageInfoData">
+    select notice.*
+    from notice
+    INNER JOIN agent ag on notice.agent_id = ag.id
+    <where>
+      <if test="agentId != null and agentId !=''">
+        and ag.id= #{agentId}
+      </if>
+      <if test="agentName != null and agentName !=''">
+        and ag.company_name like concat('%',#{agentName},'%')
+      </if>
+      <if test="state != null and state !='' or state==0 ">
+        and notice.state= #{state}
+      </if>
+      <if test="noticeType != null and noticeType !=''">
+        and notice.notice_type= #{noticeType}
+      </if>
+      <if test="agentMobile!=null and  agentMobile!=''">
+        and ag.linkman_phone like concat('%',#{agentMobile},'%')
+      </if>
+    </where>
+    order by notice.update_time desc
+  </select>
+
+
+  <update id="auditAgentMessage" parameterType="java.util.Map">
+    update notice
+    <set>
+      state = #{state},
+      update_time = NOW(),
+      remark = #{remark}
+    </set>
+    where id = #{id} and state in (0,1,2);
+  </update>
+
+  <update id="modifyAgentMessage" parameterType="java.util.Map">
+    update notice
+    <set>
+      title = #{title},
+      content = #{message},
+      state = #{auditState},
+      notice_type=#{type},
+      update_time = now()
+    </set>
+    where id = #{id} and state in (0,1,2)
+  </update>
+
+  <update id="deleteAgentMessage">
+    update notice
+    <set>
+      state = 5,
+      update_time = NOW()
+    </set>
+    where id = #{id} and state &lt;&gt; 5
+    <if test="agentId!=null and agentId!=''">
+      and agent_id = #{agentId}
+    </if>
+  </update>
+
+
+
+</mapper>

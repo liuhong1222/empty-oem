@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.IdCardInfoMapper">
+    <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.CustDetailInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="cre_user_id" jdbcType="INTEGER" property="creUserId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="nation" jdbcType="VARCHAR" property="nation"/>
+        <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="idno" jdbcType="VARCHAR" property="idno"/>
+        <result column="signer" jdbcType="VARCHAR" property="signer"/>
+        <result column="effectDate" jdbcType="VARCHAR" property="effectdate"/>
+        <result column="expireDate" jdbcType="VARCHAR" property="expiredate"/>
+        <result column="face_url" jdbcType="VARCHAR" property="faceUrl"/>
+        <result column="back_url" jdbcType="VARCHAR" property="backUrl"/>
+        <result column="flag" jdbcType="INTEGER" property="flag"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createby"/>
+        <result column="lastTime" jdbcType="TIMESTAMP" property="lasttime"/>
+        <result column="lastRepair" jdbcType="VARCHAR" property="lastrepair"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, cre_user_id, username, sex, nation, birthday, address, idno, signer, effectDate, 
+    expireDate, face_url, back_url, flag, createTime, createBy, lastTime, lastRepair
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from idcardinfo
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from idcardinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.CustDetailInfo">
+    insert into idcardinfo (id, cre_user_id, username, 
+      sex, nation, birthday, 
+      address, idno, signer, 
+      effectDate, expireDate, face_url, 
+      back_url, flag, createTime, 
+      createBy, lastTime, lastRepair
+      )
+    values (#{id,jdbcType=INTEGER}, #{creUserId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{idno,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, 
+      #{effectdate,jdbcType=DATE}, #{expiredate,jdbcType=DATE}, #{faceUrl,jdbcType=VARCHAR}, 
+      #{backUrl,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createby,jdbcType=VARCHAR}, #{lasttime,jdbcType=TIMESTAMP}, #{lastrepair,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.CustDetailInfo">
+        insert into idcardinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="creUserId != null">
+                cre_user_id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="nation != null">
+                nation,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="idno != null">
+                idno,
+            </if>
+            <if test="signer != null">
+                signer,
+            </if>
+            <if test="effectdate != null">
+                effectDate,
+            </if>
+            <if test="expiredate != null">
+                expireDate,
+            </if>
+            <if test="faceUrl != null">
+                face_url,
+            </if>
+            <if test="backUrl != null">
+                back_url,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="createtime != null">
+                createTime,
+            </if>
+            <if test="createby != null">
+                createBy,
+            </if>
+            <if test="lasttime != null">
+                lastTime,
+            </if>
+            <if test="lastrepair != null">
+                lastRepair,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="creUserId != null">
+                #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="nation != null">
+                #{nation,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="idno != null">
+                #{idno,jdbcType=VARCHAR},
+            </if>
+            <if test="signer != null">
+                #{signer,jdbcType=VARCHAR},
+            </if>
+            <if test="effectdate != null">
+                #{effectdate,jdbcType=DATE},
+            </if>
+            <if test="expiredate != null">
+                #{expiredate,jdbcType=DATE},
+            </if>
+            <if test="faceUrl != null">
+                #{faceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="backUrl != null">
+                #{backUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createby != null">
+                #{createby,jdbcType=VARCHAR},
+            </if>
+            <if test="lasttime != null">
+                #{lasttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastrepair != null">
+                #{lastrepair,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.CustDetailInfo">
+        update idcardinfo
+        <set>
+            <if test="creUserId != null">
+                cre_user_id = #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="nation != null">
+                nation = #{nation,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="idno != null">
+                idno = #{idno,jdbcType=VARCHAR},
+            </if>
+            <if test="signer != null">
+                signer = #{signer,jdbcType=VARCHAR},
+            </if>
+            <if test="effectdate != null">
+                effectDate = #{effectdate,jdbcType=DATE},
+            </if>
+            <if test="expiredate != null">
+                expireDate = #{expiredate,jdbcType=DATE},
+            </if>
+            <if test="faceUrl != null">
+                face_url = #{faceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="backUrl != null">
+                back_url = #{backUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                createTime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createby != null">
+                createBy = #{createby,jdbcType=VARCHAR},
+            </if>
+            <if test="lasttime != null">
+                lastTime = #{lasttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastrepair != null">
+                lastRepair = #{lastrepair,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.CustDetailInfo">
+    update idcardinfo
+    set cre_user_id = #{creUserId,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      idno = #{idno,jdbcType=VARCHAR},
+      signer = #{signer,jdbcType=VARCHAR},
+      effectDate = #{effectdate,jdbcType=DATE},
+      expireDate = #{expiredate,jdbcType=DATE},
+      face_url = #{faceUrl,jdbcType=VARCHAR},
+      back_url = #{backUrl,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      createBy = #{createby,jdbcType=VARCHAR},
+      lastTime = #{lasttime,jdbcType=TIMESTAMP},
+      lastRepair = #{lastrepair,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="queryOneByCreUserId" parameterType="HashMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from idcardinfo
+        where cre_user_id = #{creUserId}
+        order by flag desc,id desc
+        limit 1
+    </select>
+
+
+</mapper>

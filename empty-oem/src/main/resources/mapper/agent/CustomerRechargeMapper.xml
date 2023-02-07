@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.CustomerRechargeMapper">
+
+    <sql id="Base_Column_List">
+    id, cre_user_id, order_no, trade_no, cl_order_no, products_id, number, money, pay_type,
+    pay_time, type, status, delete_status, version, create_time, update_time
+  </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from trd_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="save" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+    insert into customer_recharge(id,agent_id, customer_id, goods_name, name, phone, order_no, price, recharge_number, payment_amount,
+    pay_type, remark, version,creator_name, category, opening_balance, closing_balance ,create_time, update_time )
+    values (#{id},#{agentId}, #{customerId}, #{goodsName}, #{name}, #{phone}, #{orderNo}, #{price}, #{rechargeNumber}, #{paymentAmount},
+    #{payType}, #{remark}, #{version},#{creatorName}, #{category}, #{openingBalance}, #{closingBalance} ,now(), now())
+  </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+        insert into trd_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="creUserId != null">
+                cre_user_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="tradeNo != null">
+                trade_no,
+            </if>
+            <if test="clOrderNo != null">
+                cl_order_no,
+            </if>
+            <if test="productsId != null">
+                products_id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="payType != null">
+                pay_type,
+            </if>
+            <if test="payTime != null">
+                pay_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="deleteStatus != null">
+                delete_status,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="creUserId != null">
+                #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clOrderNo != null">
+                #{clOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productsId != null">
+                #{productsId,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteStatus != null">
+                #{deleteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+        update trd_order
+        <set>
+            <if test="creUserId != null">
+                cre_user_id = #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                trade_no = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clOrderNo != null">
+                cl_order_no = #{clOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productsId != null">
+                products_id = #{productsId,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                pay_type = #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+    update trd_order
+    set cre_user_id = #{creUserId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR},
+      cl_order_no = #{clOrderNo,jdbcType=VARCHAR},
+      products_id = #{productsId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      delete_status = #{deleteStatus,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="sumMoney" resultType="java.math.BigDecimal">
+    SELECT SUM(money) FROM trd_order
+    WHERE create_time &gt;= #{beginTime} AND create_time &lt;= #{endTime}
+    AND delete_status = '0' AND STATUS = '1'
+  </select>
+
+    <select id="selectRechargeList" parameterType="com.cc.oem.modules.agent.model.param.RechargeDetailParam"
+            resultType="java.util.Map">
+        SELECT t4.id as id,t1.id as orderId,concat(SUBSTR(t4.user_phone,1,3),'****',SUBSTR(t4.user_phone,8,4)) user_phone, t3.product_name,t2.package_name,t1.money/t1.number as
+        price,t1.money,t1.number,
+        (case t1.pay_type
+        WHEN '1' then "支付宝"
+        WHEN '2' then "银联"
+        WHEN '3' then "创蓝充值"
+        WHEN '4' then "管理员充值"
+        END) as pay_type
+        ,t1.create_time,t1.type
+        from trd_order t1 LEFT JOIN t_product_package t2
+        on t1.products_id=t2.id
+        LEFT JOIN t_product t3 on t2.product_id=t3.id
+        left JOIN cre_user t4 on t1.cre_user_id=t4.id
+        where 1=1
+        and t1.`status`='1'
+        and t1.delete_status='0'
+        <if test="mobile!=null and mobile!=''">
+            and t4.user_phone like #{mobile}
+        </if>
+        <if test="type!=null and type!=''">
+            and t1.type=#{type}
+        </if>
+        <if test="id!=null">
+            and t1.cre_user_id=#{id}
+        </if>
+        <if test="productId!=null">
+            and t3.id=#{productId}
+        </if>
+        <if test="payType!=null and  payType!=''">
+            and t1.pay_type=#{payType}
+        </if>
+        <if test="startDateStr!=null and  startDateStr!=''" >
+            and t1.create_time>=#{startDateStr}
+        </if>
+        <if test="endDateStr!=null  and  endDateStr!=''">
+            and t1.create_time &lt;=#{endDateStr}
+        </if>
+        <choose>
+            <when test='projectType !=null and projectType==1 '>
+                <if test="minCount!=null">
+                    and t1.money/t1.number>=#{minCount}
+                </if>
+                <if test="maxCount!=null">
+                    and t1.money/t1.number &lt;=#{maxCount}
+                </if>
+            </when>
+            <when test='projectType !=null and projectType==2 '>
+                <if test="minCount!=null">
+                    and t1.number>=#{minCount}
+                </if>
+                <if test="maxCount!=null">
+                    and t1.number &lt;=#{maxCount}
+                </if>
+            </when>
+            <when test='projectType !=null and projectType==3 '>
+                <if test="minCount!=null">
+                    and t1.money>=#{minCount}
+                </if>
+                <if test="maxCount!=null">
+                    and t1.money &lt;=#{maxCount}
+                </if>
+            </when>
+            <otherwise>
+
+            </otherwise>
+        </choose>
+        order by t1.create_time desc
+    </select>
+
+    <select id="getPackageInfo" parameterType="long" resultType="java.util.Map">
+        select t3.*
+        from agent_cre_user t1, agent t2,agent_package t3
+        where t1.agent_id=t2.id and t3.agent_id=t2.id
+        and t1.cre_user_id=#{creUserId}
+        and t3.product_id=1
+    </select>
+
+    <select id="getAgentAmountByCreUserId" parameterType="long" resultType="java.util.Map">
+        select t4.*
+        from agent_cre_user t1, agent t2,agent_account t4
+        where t1.agent_id=t2.id  and t2.id=t4.agent_id
+        and t1.cre_user_id=#{creUserId}
+    </select>
+
+    <select id="queryUserRechargeListExcludeGiftAmount" parameterType="com.cc.oem.modules.agent.model.param.FinanceRechargeParam" resultType="com.cc.oem.modules.agent.model.data.FinanceUserRechargeData">
+        select custRecharge.id, custRecharge.agent_id, custRecharge.customer_id, goods_name,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as name,
+        custRecharge.phone, order_no, custRecharge.price, custRecharge.recharge_number,
+        payment_amount, pay_type, custRecharge.remark,custRecharge.create_time, custRecharge.update_time, custRecharge.creator_name, custRecharge.category,
+        opening_balance, closing_balance,ag.company_name
+        from customer_recharge as custRecharge
+        inner join agent as ag on ag.id=custRecharge.agent_id
+        inner join customer cu on cu.id = custRecharge.customer_id
+        left join customer_ext ext on ext.customer_id = custRecharge.customer_id
+        <where>
+            custRecharge.pay_type!=2
+            <if test="payType != null">
+                and custRecharge.pay_type= #{payType}
+            </if>
+            <if test="startTime != null and startTime !=''">
+                and custRecharge.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime !=''">
+                and custRecharge.create_time &lt;= #{endTime}
+            </if>
+            <if test="agentId != null and agentId !=''">
+                and custRecharge.agent_id= #{agentId}
+            </if>
+            <if test="category != null">
+                and custRecharge.category= #{category}
+            </if>
+            <if test="custIdList != null">
+                and custRecharge.customer_id in(
+                <foreach collection="custIdList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="companyName != null and companyName !=''">
+                and ag.company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="custMobile != null and custMobile !=''">
+                and custRecharge.phone like concat('%',#{custMobile},'%')
+            </if>
+        </where>
+
+        order by custRecharge.create_time desc
+    </select>
+
+
+    <select id="getGiveAmountSumByCreUserId"
+            resultType="com.cc.oem.modules.agent.model.data.customer.CustomerGivenRechargeNumInfo">
+        select sum(t.recharge_number) givenRechargeNum,category
+        from customer_recharge t
+        where
+        t.customer_id = #{customerId}
+        and t.pay_type in(2,10)
+        group by category
+    </select>
+
+    <select id="countRegisterSend"
+            resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM customer_recharge t
+        WHERE t.pay_type = 2
+        AND t.recharge_number = 5000
+        and t.customer_id = #{custId}
+    </select>
+
+    <select id="countIntervalDailyReport" resultType="com.cc.oem.modules.job.entity.task.CustDailyRechargeConsumeInfo">
+        select agent_id,customer_id,#{invokeDate} dayInt
+        	   ,sum(if(category = 0,ifnull(recharge_number,0),0)) emptyRechargeNum
+        	   ,sum(if(category = 0,ifnull(payment_amount,0),0)) emptyRechargeMoney
+        	   ,sum(if(category = 1,ifnull(recharge_number,0),0)) realtimeRechargeNum
+        	   ,sum(if(category = 1,ifnull(payment_amount,0),0)) realtimeRechargeMoney
+        	   ,sum(if(category = 2,ifnull(recharge_number,0),0)) internationalRechargeNum
+        	   ,sum(if(category = 2,ifnull(payment_amount,0),0)) internationalRechargeMoney
+        	   ,sum(if(category = 4,ifnull(recharge_number,0),0)) directCommonRechargeNum
+        	   ,sum(if(category = 4,ifnull(payment_amount,0),0)) directCommonRechargeMoney
+        	   ,sum(if(category = 5,ifnull(recharge_number,0),0)) lineDirectRechargeNum
+        	   ,sum(if(category = 5,ifnull(payment_amount,0),0)) lineDirectRechargeMoney
+        from customer_recharge
+        where create_time <![CDATA[>=]]>#{startDate} and create_time <![CDATA[<]]>#{endDate} and  pay_type not in(2,3,10)
+        group by customer_id, category
+    </select>
+
+    <select id="countTotalRechargeOfCust" resultType="com.cc.oem.modules.agent.entity.CustomerBalance">
+        select re.customer_id, sum(case category when 0 then recharge_number else 0 end) emptyRechargeNum,
+         sum(case category when 0 then payment_amount else 0 end) emptyRechargeMoney,
+         sum(case category when 0 then 0 else recharge_number end) realtimeRechargeNum,
+         sum(case category when 0 then 0 else payment_amount end) realtimeRechargeMoney
+         from customer_recharge re inner join customer cu on cu.id = re.customer_id
+         where pay_type !=2 and pay_type !=10 and re.create_time >=#{startTime} and re.create_time <![CDATA[<]]>#{endTime}
+        group by re.customer_id,re.agent_id
+    </select>
+
+    <select id="countTotalRechargeOfAgent" resultType="com.cc.oem.modules.agent.entity.AgentAccount">
+        select agent_id, sum(case category when 0 then recharge_number else 0 end) emptyRechargeNumber,
+         sum(case category when 0 then payment_amount else 0 end) emptyRechargeMoney,
+         sum(case category when 0 then 0 else recharge_number end) realtimeRechargeNumber,
+         sum(case category when 0 then 0 else payment_amount end) realtimeRechargeMoney
+         from customer_recharge
+         where pay_type !=2 and pay_type !=10 and create_time >=#{startTime} and create_time <![CDATA[<]]>#{endTime}
+        group by agent_id
+    </select>
+
+    <select id="queryTotalRechargeInfo" resultType="com.cc.oem.modules.agent.entity.finance.CustomerRechargeVo">
+        select sum(recharge_number) recharge_number,sum(payment_amount) payment_amount
+        from customer_recharge as custRecharge
+        inner join agent as ag on ag.id=custRecharge.agent_id
+        inner join customer cu on cu.id = custRecharge.customer_id
+        left join customer_ext ext on ext.customer_id = custRecharge.customer_id
+        <where>
+            custRecharge.pay_type!=2
+            <if test="payType != null">
+                and custRecharge.pay_type= #{payType}
+            </if>
+            <if test="startTime != null and startTime !=''">
+                and custRecharge.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime !=''">
+                and custRecharge.create_time &lt;= #{endTime}
+            </if>
+            <if test="agentId != null and agentId !=''">
+                and custRecharge.agent_id= #{agentId}
+            </if>
+            <if test="category != null">
+                and custRecharge.category= #{category}
+            </if>
+            <if test="custIdList != null">
+                and custRecharge.customer_id in(
+                <foreach collection="custIdList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="companyName != null and companyName !=''">
+                and ag.company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="custMobile != null and custMobile !=''">
+                and custRecharge.phone like concat('%',#{custMobile},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <select id="countHaveRegisterSend" resultType="java.lang.Long">
+        select distinct customer_id from customer_recharge t
+        WHERE t.pay_type = 2
+        AND t.recharge_number = 5000
+        and t.customer_id in(
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+</mapper>

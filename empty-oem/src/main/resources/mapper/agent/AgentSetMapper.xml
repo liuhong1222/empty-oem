@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentSetMapper">
+
+    <insert id="saveAgentSetting" parameterType="com.cc.oem.modules.agent.entity.agentSettings.AgentSettings">
+        insert into agent_settings(
+            id,create_time,update_time,agent_id,agent_name
+        <if test="onlineBlUrl!=null">
+            ,online_bl_url
+        </if>
+         <if test="apiDomain!=null">
+            ,api_domain
+        </if>
+        <if test="officialWeb!=null">
+            ,official_web
+        </if>
+        <if test="browserRightDisplay!=null">
+            ,browser_right_display
+        </if>
+        <if test="agentLogo!=null and agentLogo!=''">
+            ,agent_logo
+        </if>
+        <if test="agentIcon!=null  and agentIcon!=''">
+           , agent_icon
+        </if>
+        <if test="deputySignature!=null and deputySignature!=''">
+           , deputy_signature
+        </if>
+        <if test="companyChop!=null and companyChop!=''">
+          ,  company_chop
+        </if>
+        <if test="smsSignature!=null and smsSignature!=''">
+          ,  sms_signature
+        </if>
+        <if test="domain!=null and domain!=''">
+          ,  domain
+        </if>
+        <if test="domainCopyright!=null and domainCopyright!=''">
+          ,  domain_copyright
+        </if>
+        <if test="hotline!=null and hotline!=''">
+          ,  hotline
+        </if>
+        <if test="qq!=null and qq!=''">
+          ,  qq
+        </if>
+        <if test="businessCode!=null and businessCode!=''">
+         ,   business_code
+        </if>
+        <if test="wechatQrcode!=null and wechatQrcode!=''">
+         ,   wechat_qrcode
+        </if>
+
+        <if test="domainCompanyAddress!=null and domainCompanyAddress!=''">
+         ,   domain_company_address
+        </if>
+        <if test="domainContactWay!=null and domainContactWay!=''">
+            ,domain_contact_way
+        </if>
+        <if test="telecomCertification!=null and telecomCertification!=''">
+           , telecom_certification
+        </if>
+        <if test="wechatpayNotify!=null  and wechatpayNotify!=''">
+          ,  wechatpay_notify
+        </if>
+        <if test="icp!=null  and icp!=''">
+           , icp
+        </if>
+        <if test="publicSecurityFiling!=null  and publicSecurityFiling!=''">
+           , public_security_filing
+        </if>
+        <if test="alipayAppid!=null and alipayAppid!=''">
+           , alipay_appid
+        </if>
+        <if test="alipayGateway!=null and alipayGateway!=''">
+          ,  alipay_gateway
+        </if>
+        <if test="alipayNotify!=null and alipayNotify!=''">
+           , alipay_notify
+        </if>
+        <if test="alipayPublicKey!=null and alipayPublicKey!=''">
+            ,alipay_public_key
+        </if>
+        <if test="applicationPrivateKey!=null and applicationPrivateKey!=''">
+           , application_private_key
+        </if>
+        <if test="contactCompanyName!=null and contactCompanyName!=''">
+            ,contact_company_name
+        </if>
+        <if test="contactCompanyAddress!=null and contactCompanyAddress!=''">
+           , contact_company_address
+        </if>
+        <if test="contactCompanyAccount!=null and contactCompanyAccount!=''">
+           , contact_company_account
+        </if>
+        <if test="contactCompanyBank!=null and contactCompanyBank!=''">
+           , contact_company_bank
+        </if>
+        <if test="contactPostcode!=null and contactPostcode!=''">
+           , contact_postcode
+        </if>
+        <if test="contactPhone!=null and contactPhone!=''">
+           , contact_phone
+        </if>
+        <if test="wechatGateway!=null and wechatGateway!=''">
+           , wechat_gateway
+        </if>
+        <if test="wechatAppid!=null and wechatAppid!=''">
+           , wechat_appid
+        </if>
+        <if test="wechatMchid!=null and wechatMchid!=''">
+          ,  wechat_mchid
+        </if>
+        <if test="wechatKey!=null and wechatKey!=''">
+           , wechat_key
+        </if>
+        <if test="wechatAppsecret!=null and wechatAppsecret!=''">
+           , wechat_appsecret
+        </if>
+        <if test="remark!=null and remark!=''">
+           , remark
+        </if>
+        <if test="siteName!=null and siteName!=''">
+           , site_name
+        </if>
+        <if test="seoKeywords!=null and seoKeywords!=''">
+           , seo_keywords
+        </if>
+        <if test="seoDescription!=null and seoDescription!=''">
+           , seo_description
+        </if>
+        <if test="la51Src!=null and la51Src!=''">
+           , la51_src
+        </if>
+        <if test="baiduSrc!=null and baiduSrc!=''">
+          ,  baidu_src
+        </if>
+        <if test="payAccountAlipay!=null and payAccountAlipay!=''">
+          ,  pay_account_alipay
+        </if>
+        <if test="agreement!=null and agreement!=''">
+           , agreement
+        </if>
+        <if test="baiduocpcToken!=null and baiduocpcToken!=''">
+           , baiduocpc_token
+        </if>
+        <if test="kefuNickname!=null and kefuNickname!=''">
+           , kefu_nickname
+        </if>
+        <if test="maintainerPhone!=null and maintainerPhone!=''">
+           , maintainer_phone
+        </if>
+        <if test="maintainerQq!=null and maintainerQq!=''">
+          ,  maintainer_qq
+        </if>
+        <if test="maintainerNickname!=null and maintainerNickname!=''">
+           , maintainer_nickname
+        </if>
+        <if test="maintainerWechatQrcode!=null and maintainerWechatQrcode!=''">
+          ,  maintainer_wechat_qrcode
+        </if>
+        <if test="payeePublic!=null and payeePublic!=''">
+           , payee_public
+        </if>
+        <if test="payBankPublic!=null and payBankPublic!=''">
+           , pay_bank_public
+        </if>
+        <if test="payBankPrivate!=null and payBankPrivate!=''">
+          ,  pay_bank_private
+        </if>
+        <if test="payAccountPublic!=null and payAccountPublic!=''">
+           , pay_account_public
+        </if>
+        <if test="payeePrivate!=null and payeePrivate!=''">
+           , payee_private
+        </if>
+        <if test="payAccountPrivate!=null and payAccountPrivate!=''">
+           , pay_account_private
+        </if>
+        <if test="payeeWechat!=null and payeeWechat!=''">
+            ,payee_wechat
+        </if>
+        <if test="payQrcodeWechat!=null and payQrcodeWechat!=''">
+            ,pay_qrcode_wechat
+        </if>
+        <if test="payAccountWechat!=null and payAccountWechat!=''">
+            ,pay_account_wechat
+        </if>
+        <if test="payeeAlipay!=null and payeeAlipay!=''">
+            ,payee_alipay
+        </if>
+        <if test="payQrcodeAlipay!=null and payQrcodeAlipay!=''">
+            ,pay_qrcode_alipay
+        </if>
+        )
+            values(
+                #{id},now(),now(),#{agentId},(select company_name from agent where agent.id = #{agentId})
+            <if test="onlineBlUrl!=null">
+                ,#{onlineBlUrl}
+            </if>
+            <if test="apiDomain!=null">
+                ,#{apiDomain}
+            </if>
+            <if test="officialWeb!=null">
+                ,#{officialWeb}
+            </if>
+            <if test="browserRightDisplay!=null">
+                ,#{browserRightDisplay}
+            </if>
+            <if test="agentLogo!=null and agentLogo!=''">
+                ,#{agentLogo}
+            </if>
+            <if test="agentIcon!=null and agentIcon!=''">
+                ,#{agentIcon}
+            </if>
+            <if test="deputySignature!=null and deputySignature!=''">
+                ,#{deputySignature}
+            </if>
+            <if test="companyChop!=null and companyChop!=''">
+                ,#{companyChop}
+            </if>
+            <if test="smsSignature!=null and smsSignature!=''">
+                ,#{smsSignature}
+            </if>
+            <if test="domain!=null and domain!=''">
+                ,#{domain}
+            </if>
+            <if test="domainCopyright!=null and domainCopyright!=''">
+                ,#{domainCopyright}
+            </if>
+            <if test="hotline!=null and hotline!=''">
+               , #{hotline}
+            </if>
+            <if test="qq!=null and qq!=''">
+               , #{qq}
+            </if>
+            <if test="businessCode!=null and businessCode!=''">
+                ,#{businessCode}
+            </if>
+            <if test="wechatQrcode!=null and wechatQrcode!=''">
+               , #{wechatQrcode}
+            </if>
+            <if test="domainCompanyAddress!=null and domainCompanyAddress!=''">
+               , #{domainCompanyAddress}
+            </if>
+            <if test="domainContactWay!=null and domainContactWay!=''">
+               , #{domainContactWay}
+            </if>
+
+            <if test="telecomCertification!=null and telecomCertification!=''">
+              ,  #{telecomCertification}
+            </if>
+            <if test="wechatpayNotify!=null and wechatpayNotify!=''">
+              ,  #{wechatpayNotify}
+            </if>
+            <if test="icp!=null and icp!=''">
+               , #{icp}
+            </if>
+            <if test="publicSecurityFiling!=null and publicSecurityFiling!=''">
+              ,  #{publicSecurityFiling}
+            </if>
+            <if test="alipayAppid!=null and alipayAppid!=''">
+              ,  #{alipayAppid}
+            </if>
+            <if test="alipayGateway!=null and alipayGateway!=''">
+             ,   #{alipayGateway}
+            </if>
+            <if test="alipayNotify!=null and alipayNotify!=''">
+               , #{alipayNotify}
+            </if>
+            <if test="alipayPublicKey!=null and alipayPublicKey!=''">
+               , #{alipayPublicKey}
+            </if>
+            <if test="applicationPrivateKey!=null and applicationPrivateKey!=''">
+              ,  #{applicationPrivateKey}
+            </if>
+            <if test="contactCompanyName!=null and contactCompanyName!=''">
+             ,   #{contactCompanyName}
+            </if>
+            <if test="contactCompanyAddress!=null and contactCompanyAddress!=''">
+              ,  #{contactCompanyAddress}
+            </if>
+            <if test="contactCompanyAccount!=null and contactCompanyAccount!=''">
+             ,   #{contactCompanyAccount}
+            </if>
+            <if test="contactCompanyBank!=null and contactCompanyBank!=''">
+             ,   #{contactCompanyBank}
+            </if>
+            <if test="contactPostcode!=null and contactPostcode!=''">
+              ,  #{contactPostcode}
+            </if>
+            <if test="contactPhone!=null and contactPhone!=''">
+              ,  #{contactPhone}
+            </if>
+            <if test="wechatGateway!=null and wechatGateway!=''">
+             ,   #{wechatGateway}
+            </if>
+            <if test="wechatAppid!=null and wechatAppid!=''">
+              ,  #{wechatAppid}
+            </if>
+            <if test="wechatMchid!=null and wechatMchid!=''">
+                ,#{wechatMchid}
+            </if>
+            <if test="wechatKey!=null and wechatKey!=''">
+                ,#{wechatKey}
+            </if>
+            <if test="wechatAppsecret!=null and wechatAppsecret!=''">
+                ,#{wechatAppsecret}
+            </if>
+            <if test="remark!=null and remark!=''">
+                ,#{remark}
+            </if>
+            <if test="siteName!=null and siteName!=''">
+                ,#{siteName}
+            </if>
+            <if test="seoKeywords!=null and seoKeywords!=''">
+                ,#{seoKeywords}
+            </if>
+            <if test="seoDescription!=null and seoDescription!=''">
+                ,#{seoDescription}
+            </if>
+            <if test="la51Src!=null and la51Src!=''">
+                ,#{la51Src}
+            </if>
+            <if test="baiduSrc!=null and baiduSrc!=''">
+                ,#{baiduSrc}
+            </if>
+            <if test="payAccountAlipay!=null and payAccountAlipay!=''">
+                ,#{payAccountAlipay}
+            </if>
+            <if test="agreement!=null and agreement!=''">
+                ,#{agreement}
+            </if>
+            <if test="baiduocpcToken!=null and baiduocpcToken!=''">
+                ,#{baiduocpcToken}
+            </if>
+            <if test="kefuNickname!=null and kefuNickname!=''">
+                ,#{kefuNickname}
+            </if>
+            <if test="maintainerPhone!=null and maintainerPhone!=''">
+                ,#{maintainerPhone}
+            </if>
+            <if test="maintainerQq!=null and maintainerQq!=''">
+                ,#{maintainerQq}
+            </if>
+            <if test="maintainerNickname!=null and maintainerNickname!=''">
+                ,#{maintainerNickname}
+            </if>
+            <if test="maintainerWechatQrcode!=null and maintainerWechatQrcode!=''">
+                ,#{maintainerWechatQrcode}
+            </if>
+            <if test="payeePublic!=null and payeePublic!=''">
+                ,#{payeePublic}
+            </if>
+            <if test="payBankPublic!=null and payBankPublic!=''">
+                ,#{payBankPublic}
+            </if>
+            <if test="payBankPrivate!=null and payBankPrivate!=''">
+                ,#{payBankPrivate}
+            </if>
+            <if test="payAccountPublic!=null and payAccountPublic!=''">
+                ,#{payAccountPublic}
+            </if>
+            <if test="payeePrivate!=null and payeePrivate!=''">
+                ,#{payeePrivate}
+            </if>
+
+            <if test="payAccountPrivate!=null and payAccountPrivate!=''">
+                ,#{payAccountPrivate}
+            </if>
+            <if test="payeeWechat!=null and payeeWechat!=''">
+                ,#{payeeWechat}
+            </if>
+            <if test="payQrcodeWechat!=null and payQrcodeWechat!=''">
+                ,#{payQrcodeWechat}
+            </if>
+            <if test="payAccountWechat!=null and payAccountWechat!=''">
+                ,#{payAccountWechat}
+            </if>
+            <if test="payeeAlipay!=null and payeeAlipay!=''">
+                ,#{payeeAlipay}
+            </if>
+            <if test="payQrcodeAlipay!=null and payQrcodeAlipay!=''">
+                ,#{payQrcodeAlipay}
+            </if>
+        )
+    </insert>
+
+    <update id="updateAgentSettings">
+        update agent_settings
+        <set>
+            update_time = now(),
+            <if test="state!=null">
+                state = #{state},
+            </if>
+            <if test="onlineBlUrl!=null">
+                online_bl_url = #{onlineBlUrl},
+            </if>
+            <if test="apiDomain!=null">
+                api_domain = #{apiDomain},
+            </if>
+            <if test="officialWeb!=null">
+                official_web = #{officialWeb},
+            </if>
+            <if test="browserRightDisplay!=null">
+                browser_right_display =#{browserRightDisplay},
+            </if>
+            <if test="agentLogo!=null">
+                agent_logo = #{agentLogo},
+            </if>
+            <if test="agentIcon!=null">
+                agent_icon =#{agentIcon},
+            </if>
+            <if test="deputySignature!=null">
+                deputy_signature=#{deputySignature},
+            </if>
+            <if test="companyChop!=null">
+                company_chop=#{companyChop},
+            </if>
+            <if test="smsSignature!=null">
+                sms_signature=#{smsSignature},
+            </if>
+            <if test="domain!=null">
+                domain =#{domain},
+            </if>
+            <if test="domainCopyright!=null">
+                domain_copyright=#{domainCopyright},
+            </if>
+            <if test="hotline!=null">
+                hotline=#{hotline},
+            </if>
+            <if test="qq!=null">
+                qq=#{qq},
+            </if>
+            <if test="businessCode!=null">
+                business_code=#{businessCode},
+            </if>
+            <if test="wechatQrcode!=null">
+                wechat_qrcode=#{wechatQrcode},
+            </if>
+
+            <if test="domainCompanyAddress!=null">
+                domain_company_address=#{domainCompanyAddress},
+            </if>
+            <if test="domainContactWay!=null">
+                domain_contact_way=#{domainContactWay},
+            </if>
+            <if test="telecomCertification!=null">
+                telecom_certification=#{telecomCertification},
+            </if>
+            <if test="wechatpayNotify!=null">
+                wechatpay_notify=#{wechatpayNotify},
+            </if>
+            <if test="icp!=null">
+                icp=#{icp},
+            </if>
+            <if test="publicSecurityFiling!=null">
+                public_security_filing=#{publicSecurityFiling},
+            </if>
+            <if test="alipayAppid!=null">
+                alipay_appid=#{alipayAppid},
+            </if>
+            <if test="alipayGateway!=null">
+                alipay_gateway=#{alipayGateway},
+            </if>
+            <if test="alipayNotify!=null">
+                alipay_notify=#{alipayNotify},
+            </if>
+            <if test="alipayPublicKey!=null">
+                alipay_public_key=#{alipayPublicKey},
+            </if>
+            <if test="applicationPrivateKey!=null">
+                application_private_key=#{applicationPrivateKey},
+            </if>
+            <if test="contactCompanyName!=null">
+                contact_company_name=#{contactCompanyName},
+            </if>
+            <if test="contactCompanyAddress!=null">
+                contact_company_address=#{contactCompanyAddress},
+            </if>
+            <if test="contactCompanyAccount!=null">
+                contact_company_account=#{contactCompanyAccount},
+            </if>
+            <if test="contactCompanyBank!=null">
+                contact_company_bank=#{contactCompanyBank},
+            </if>
+            <if test="contactPostcode!=null">
+                contact_postcode=#{contactPostcode},
+            </if>
+            <if test="contactPhone!=null">
+                contact_phone=#{contactPhone},
+            </if>
+            <if test="wechatGateway!=null">
+                wechat_gateway=#{wechatGateway},
+            </if>
+            <if test="wechatAppid!=null">
+                wechat_appid=#{wechatAppid},
+            </if>
+            <if test="wechatMchid!=null">
+                wechat_mchid=#{wechatMchid},
+            </if>
+            <if test="wechatKey!=null">
+                wechat_key=#{wechatKey},
+            </if>
+            <if test="wechatAppsecret!=null">
+                wechat_appsecret=#{wechatAppsecret},
+            </if>
+            <if test="remark!=null">
+                remark=#{remark},
+            </if>
+            <if test="siteName!=null">
+                site_name=#{siteName},
+            </if>
+            <if test="seoKeywords!=null">
+                seo_keywords=#{seoKeywords},
+            </if>
+            <if test="seoDescription!=null">
+                seo_description=#{seoDescription},
+            </if>
+            <if test="la51Src!=null">
+                la51_src=#{la51Src},
+            </if>
+            <if test="baiduSrc!=null">
+                baidu_src=#{baiduSrc},
+            </if>
+            <if test="payAccountAlipay!=null">
+                pay_account_alipay=#{payAccountAlipay},
+            </if>
+            <if test="agreement!=null">
+                agreement=#{agreement},
+            </if>
+            <if test="baiduocpcToken!=null">
+                baiduocpc_token=#{baiduocpcToken},
+            </if>
+            <if test="kefuNickname!=null">
+                kefu_nickname=#{kefuNickname},
+            </if>
+            <if test="maintainerPhone!=null">
+                maintainer_phone=#{maintainerPhone},
+            </if>
+            <if test="maintainerQq!=null">
+                maintainer_qq=#{maintainerQq},
+            </if>
+            <if test="maintainerNickname!=null">
+                maintainer_nickname=#{maintainerNickname},
+            </if>
+            <if test="maintainerWechatQrcode!=null">
+                maintainer_wechat_qrcode=#{maintainerWechatQrcode},
+            </if>
+            <if test="payeePublic!=null">
+                payee_public=#{payeePublic},
+            </if>
+            <if test="payBankPublic!=null">
+                pay_bank_public=#{payBankPublic},
+            </if>
+            <if test="payBankPrivate!=null">
+                pay_bank_private=#{payBankPrivate},
+            </if>
+            <if test="payAccountPublic!=null">
+                pay_account_public=#{payAccountPublic},
+            </if>
+            <if test="payeePrivate!=null">
+                payee_private=#{payeePrivate},
+            </if>
+            <if test="payAccountPrivate!=null">
+                pay_account_private=#{payAccountPrivate},
+            </if>
+            <if test="payeeWechat!=null">
+                payee_wechat=#{payeeWechat},
+            </if>
+            <if test="payQrcodeWechat!=null">
+                pay_qrcode_wechat=#{payQrcodeWechat},
+            </if>
+            <if test="payAccountWechat!=null">
+                pay_account_wechat=#{payAccountWechat},
+            </if>
+            <if test="payeeAlipay!=null">
+                payee_alipay=#{payeeAlipay},
+            </if>
+            <if test="payQrcodeAlipay!=null">
+                pay_qrcode_alipay=#{payQrcodeAlipay}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="agentSetList" parameterType="com.cc.oem.modules.agent.model.param.AgentSetListParam"
+            resultType="com.cc.oem.modules.agent.model.data.records.AgentSettingsQueryData">
+        SELECT sett.*
+        from agent_settings sett inner JOIN agent ag on ag.id = sett.agent_id
+        <where>
+            <if test="startTime!=null and  startTime!=''">
+                and ag.create_time >=#{startTime}
+            </if>
+            <if test="endTime!=null  and  endTime!=''">
+                and ag.create_time &lt;=#{endTime}
+            </if>
+            <if test="agentName!=null  and  agentName!=''">
+                and ag.company_name like concat('%',#{agentName},'%')
+            </if>
+            <if test="state!=null and  state!='' or state==0">
+                and sett.state = #{state}
+            </if>
+            <if test="linkmanPhone!=null and  linkmanPhone!=''">
+                and ag.linkman_phone like concat('%',#{linkmanPhone},'%')
+            </if>
+        </where>
+        order by sett.create_time desc
+    </select>
+
+    <select id="findBasicInfo" parameterType="java.lang.Long"
+            resultType="com.cc.oem.modules.agent.entity.agentSettings.AgentSettings">
+        SELECT
+        aset.*
+        FROM
+        agent_settings aset
+        WHERE
+        aset.agent_id =#{agentId}
+
+    </select>
+
+    <select id="selectByDomain" resultType="com.cc.oem.modules.agent.entity.agentSettings.AgentSettings">
+        select * from agent_settings where domain = #{domain}
+    </select>
+
+    <select id="selectDomainByAgentId" resultType="java.lang.String">
+        select domain from agent_settings where agent_id = #{agentId}
+    </select>
+
+    <update id="auditAgentSetting">
+        update agent_settings set state =#{state},remark = #{remark}
+        <if test="officialWeb!=null">
+            ,official_web = #{officialWeb}
+        </if>
+        ,update_time = now()
+        where agent_id = #{agentId}
+    </update>
+
+    <select id="queryAgentSettingByDomain" resultType="java.lang.Long">
+        select id from agent_settings where domain = #{domain}
+    </select>
+
+    <select id="querAgentIdListByOfficialWeb" resultType="java.lang.Long">
+        select agent_id from agent_settings where official_web = #{officialWeb}
+    </select>
+</mapper>

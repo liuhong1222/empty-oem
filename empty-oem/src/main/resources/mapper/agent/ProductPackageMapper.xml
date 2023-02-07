@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.ProductPackageMapper">
+    <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.ProductPackage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_id" jdbcType="BIGINT" property="productId"/>
+        <result column="package_name" jdbcType="VARCHAR" property="packageName"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="money" jdbcType="DECIMAL" property="money"/>
+        <result column="order_code" jdbcType="VARCHAR" property="orderCode"/>
+        <result column="discout" jdbcType="DECIMAL" property="discout"/>
+        <result column="original_cost" jdbcType="DECIMAL" property="originalCost"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, product_id, package_name, number, money, order_code, discout, original_cost,
+    is_deleted, create_time, create_by
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product_package
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_product_package
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.ProductPackage">
+    insert into t_product_package (id, product_id, package_name, 
+      number, money, order_code, 
+      discout, original_cost, is_deleted,
+      create_time, create_by)
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{packageName,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{orderCode,jdbcType=VARCHAR}, 
+      #{discout,jdbcType=DECIMAL}, #{originalCost,jdbcType=DECIMAL}, #{isDeleted,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.ProductPackage">
+        insert into t_product_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="packageName != null">
+                package_name,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="orderCode != null">
+                order_code,
+            </if>
+            <if test="discout != null">
+                discout,
+            </if>
+            <if test="originalCost != null">
+                original_cost,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=BIGINT},
+            </if>
+            <if test="packageName != null">
+                #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="orderCode != null">
+                #{orderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="discout != null">
+                #{discout,jdbcType=DECIMAL},
+            </if>
+            <if test="originalCost != null">
+                #{originalCost,jdbcType=DECIMAL},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.ProductPackage">
+        update t_product_package
+        <set>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=BIGINT},
+            </if>
+            <if test="packageName != null">
+                package_name = #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="orderCode != null">
+                order_code = #{orderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="discout != null">
+                discout = #{discout,jdbcType=DECIMAL},
+            </if>
+            <if test="originalCost != null">
+                original_cost = #{originalCost,jdbcType=DECIMAL},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.ProductPackage">
+    update t_product_package
+    set product_id = #{productId,jdbcType=BIGINT},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      order_code = #{orderCode,jdbcType=VARCHAR},
+      discout = #{discout,jdbcType=DECIMAL},
+      original_cost = #{originalCost,jdbcType=DECIMAL},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="selectSelective" parameterType="com.cc.oem.modules.agent.entity.ProductPackage"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product_package
+        where 1=1
+        <if test="productId != null">
+            and product_id = #{productId,jdbcType=BIGINT}
+        </if>
+        <if test="packageName != null">
+            and package_name = #{packageName,jdbcType=VARCHAR}
+        </if>
+        <if test="number != null">
+            and number = #{number,jdbcType=INTEGER}
+        </if>
+        <if test="money != null">
+            and money = #{money,jdbcType=DECIMAL}
+        </if>
+        <if test="orderCode != null">
+            and order_code = #{orderCode,jdbcType=VARCHAR}
+        </if>
+        <if test="discout != null">
+            and discout = #{discout,jdbcType=DECIMAL}
+        </if>
+        <if test="originalCost != null">
+            and original_cost = #{originalCost,jdbcType=DECIMAL}
+        </if>
+        <if test="isDeleted != null">
+            and is_deleted = #{isDeleted,jdbcType=INTEGER}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createBy != null">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="id != null">
+            and id = #{id,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectProductPackageListByProductId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product_package
+        where product_id = #{productId,jdbcType=BIGINT}
+          and is_deleted=0
+    </select>
+
+
+</mapper>

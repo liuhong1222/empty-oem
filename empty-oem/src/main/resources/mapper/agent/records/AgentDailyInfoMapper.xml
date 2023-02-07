@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cc.oem.modules.job.dao.AgentDailyInfoMapper">
+
+
+	<insert id="batchSave">
+		insert into oem_agent_daily_info (agent_id,day_int,
+				empty_recharge_num, empty_recharge_money, empty_consume,empty_counts,
+				realtime_recharge_num, realtime_recharge_money,
+				realtime_consume,realtime_counts,
+				international_recharge_num, international_recharge_money,
+				international_consume,international_counts,
+				direct_common_recharge_num, direct_common_recharge_money,
+				direct_common_consume,direct_common_counts,
+				line_direct_recharge_num, line_direct_recharge_money,
+				line_direct_consume,line_direct_counts,
+				cust_num, daily_add_cust_num,create_time, update_time )
+		values
+		<foreach collection="list" item="obj" separator=",">
+			(#{obj.agentId},#{obj.dayInt},#{obj.emptyRechargeNum},
+			#{obj.emptyRechargeMoney}, #{obj.emptyConsume}, #{obj.emptyCounts},
+			#{obj.realtimeRechargeNum}, #{obj.realtimeRechargeMoney},
+			#{obj.realtimeConsume}, #{obj.realtimeCounts},
+			#{obj.internationalRechargeNum}, #{obj.internationalRechargeMoney},
+			#{obj.internationalConsume}, #{obj.internationalCounts},
+			#{obj.directCommonRechargeNum}, #{obj.directCommonRechargeMoney},
+			#{obj.directCommonConsume}, #{obj.directCommonCounts},
+			#{obj.lineDirectRechargeNum}, #{obj.lineDirectRechargeMoney},
+			#{obj.lineDirectConsume}, #{obj.lineDirectCounts},
+			#{obj.custNum}, #{obj.dailyAddCustNum},now(),now())
+		</foreach>
+	</insert>
+
+	<update id="updateOneRecord">
+		update oem_agent_daily_info
+		<set>
+			<if test="emptyRechargeNum!=null">
+				empty_recharge_num=#{emptyRechargeNum},
+			</if>
+			<if test="emptyRechargeMoney!=null">
+				empty_recharge_money=#{emptyRechargeMoney},
+			</if>
+			<if test="emptyCounts != null">
+				empty_counts=#{emptyCounts},
+			</if>
+			<if test="emptyCosume != null">
+				empty_consume=#{emptyCosume},
+			</if>
+			<if test="emptyRechargeNum!=null">
+				realtime_recharge_num=#{emptyRechargeNum},
+			</if>
+			<if test="realtimeRechargeMoney!=null">
+				realtime_recharge_money=#{realtimeRechargeMoney},
+			</if>
+			<if test="realtimeCounts != null">
+				realtime_counts=#{realtimeCounts},
+			</if>
+			<if test="realtimeConsume != null">
+				realtime_consume=#{realtimeConsume},
+			</if>
+			<if test="custNum!=null">
+				cust_num=#{custNum},
+			</if>
+			<if test="dailyAddCustNum!=null">
+				daily_add_cust_num=#{dailyAddCustNum},
+			</if>
+			update_time = now()
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="queryAgentDailyList"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select a.* ,agent.company_name 
+		from (
+			select agent_id,day_int, ifnull(cust_num,0) cust_num,ifnull(daily_add_cust_num,0) daily_add_cust_num,
+					ifnull(empty_recharge_money,0)+ifnull(realtime_recharge_money,0)+ifnull(international_recharge_money,0)+ifnull(direct_common_recharge_money,0)+ifnull(line_direct_recharge_money,0) empty_recharge_money, 
+					ifnull(empty_counts,0) empty_counts, ifnull(empty_consume,0) empty_consume,ifnull(empty_recharge_num,0) empty_recharge_num,
+					ifnull(realtime_counts,0) realtime_counts,ifnull(realtime_consume,0) realtime_consume,ifnull(realtime_recharge_num,0) realtime_recharge_num,
+					ifnull(international_counts,0) international_counts,ifnull(international_consume,0) international_consume,ifnull(international_recharge_num,0) international_recharge_num,
+					ifnull(direct_common_counts,0) direct_common_counts,ifnull(direct_common_consume,0) direct_common_consume,ifnull(direct_common_recharge_num,0) direct_common_recharge_num,
+					ifnull(line_direct_counts,0) line_direct_counts,ifnull(line_direct_consume,0) line_direct_consume,ifnull(line_direct_recharge_num,0) line_direct_recharge_num
+			from oem_agent_daily_info info
+			<where>
+				<if test="startTime!=null">
+					day_int>=#{startTime}
+				</if>
+				<if test="endTime!=null">
+					and <![CDATA[day_int<=#{endTime}]]>
+				</if>
+				<if test="agentId!=null">
+					and <![CDATA[agent_id =#{agentId}]]>
+				</if>
+			</where>
+			group by agent_id,day_int
+		) a 
+		left join agent on agent.id = a.agent_id
+
+	</select>
+
+	<select id="queryCustDailyEmpty"
+		resultType="com.cc.oem.modules.agent.model.data.records.CustDailyPageData">
+		select * from oem_cust_daily_empty_info empty
+		<where>
+			<if test="startTime!=null and startTime!=''">
+                <![CDATA[empty.day_int >= #{startTime} and empty.day_int <= #{endTime} and realtime.day_int >= #{startTime} and realtime.day_int <= #{endTime}]]>
+			</if>
+			<if test="agentId">
+				and empty.agent_id
+			</if>
+		</where>
+	</select>
+
+
+	<select id="findListByDailyTask"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select id, day_int, empty_recharge_num,
+		empty_recharge_money, empty_consume,
+		empty_counts,realtime_recharge_num, realtime_recharge_money,
+		realtime_consume,realtime_counts, create_time,
+		update_time, cust_num, daily_add_cust_num, agent_id
+		from oem_agent_daily_info
+		where day_int = #{invokeTime}
+	</select>
+
+	<select id="countIntervalRecharge" resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select #{invokeDate} dayInt,agent_id
+		       ,sum(ifnull(empty_recharge_money,0)) empty_recharge_money,sum(ifnull(empty_recharge_num,0)) empty_recharge_num
+			   ,sum(ifnull(realtime_recharge_num,0)) realtime_recharge_num,sum(ifnull(realtime_recharge_money,0)) realtime_recharge_money
+			   ,sum(ifnull(international_recharge_num,0)) international_recharge_num,sum(ifnull(international_recharge_money,0)) international_recharge_money
+			   ,sum(ifnull(direct_common_recharge_num,0)) direct_common_recharge_num,sum(ifnull(direct_common_recharge_money,0)) direct_common_recharge_money
+			   ,sum(ifnull(line_direct_recharge_num,0)) line_direct_recharge_num,sum(ifnull(line_direct_recharge_money,0)) line_direct_recharge_money
+		from oem_cust_daily_recharge re
+		where re.day_int=#{invokeDate}
+		group by agent_id
+	</select>
+
+
+	<select id="countIntervalEmptyConsume"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select #{invokeDate} dayInt,agent_id, sum(empty_total) emptyConsume
+		from oem_cust_daily_empty_info info
+		where info.day_int=#{invokeDate}
+		group by agent_id
+	</select>
+
+	<select id="countIntervalRealtimeConsume"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select #{invokeDate} dayInt,agent_id, sum(realtime_total) realtimeConsume
+		from oem_cust_daily_realtime_info info
+		where info.day_int=#{invokeDate}
+		group by agent_id
+	</select>
+	
+	<select id="countIntervalInternationalConsume"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select #{invokeDate} dayInt,agent_id, sum(international_total) internationalConsume
+		from oem_cust_daily_international_info info
+		where info.day_int=#{invokeDate}
+		group by agent_id
+	</select>
+	
+	<select id="countIntervalIntDirectConsume"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select #{invokeDate} dayInt,agent_id, 
+			   sum(if(product_type != 'line',direct_total,0)) directCommonConsume,
+			   sum(if(product_type = 'line',direct_total,0)) lineDirectConsume
+		from oem_cust_daily_direct_info info
+		where info.day_int=#{invokeDate}
+		group by agent_id
+	</select>
+
+	<select id="queryTotalInfo"
+		resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+		select  sum(empty_recharge_money+realtime_recharge_money+international_recharge_money+direct_common_recharge_money+line_direct_recharge_money) empty_recharge_money, 
+		        sum(empty_recharge_num) empty_recharge_num,sum(empty_consume) empty_consume,sum(empty_counts) empty_counts, 
+				sum(realtime_recharge_num) realtime_recharge_num,sum(realtime_consume) realtime_consume, sum(realtime_counts) realtime_counts,
+				sum(international_recharge_num) international_recharge_num,sum(international_consume) international_consume, sum(international_counts) international_counts,
+				sum(direct_common_recharge_num) direct_common_recharge_num,sum(direct_common_consume) direct_common_consume, sum(direct_common_counts) direct_common_counts,
+				sum(line_direct_recharge_num) line_direct_recharge_num,sum(line_direct_consume) line_direct_consume, sum(line_direct_counts) line_direct_counts,
+				sum(cust_num) cust_num,sum(daily_add_cust_num) daily_add_cust_num
+		from oem_agent_daily_info
+		<where>
+			<if test="startTime!=null">
+				day_int>=#{startTime}
+			</if>
+			<if test="endTime!=null">
+				and <![CDATA[day_int<=#{endTime}]]>
+			</if>
+			<if test="agentId!=null">
+				and <![CDATA[agent_id =#{agentId}]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="getDeskConsumeData">
+	
+	</select>
+</mapper>

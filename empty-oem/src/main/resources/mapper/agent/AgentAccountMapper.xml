@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentAccountMapper">
+    <sql id="Base_Column_List">
+    id, agent_id, empty_recharge_money, realtime_recharge_money, international_recharge_money,direct_common_recharge_money,line_direct_recharge_money,create_time,
+    update_time, empty_recharge_number, realtime_recharge_number, international_recharge_number,direct_common_recharge_number,line_direct_recharge_number,
+    empty_balance, realtime_balance,international_balance,direct_common_balance,line_direct_balance,
+    cust_recharge_money, cust_recharge_num, cust_realtime_recharge_money, cust_realtime_recharge_num,cust_international_recharge_money,cust_international_recharge_num,
+    cust_direct_common_recharge_money,cust_direct_common_recharge_num,cust_line_direct_recharge_money,cust_line_direct_recharge_num
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AgentAccount">
+        select
+        <include refid="Base_Column_List"/>
+        from agent_account
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM agent_account
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert">
+        insert into agent_account (<include refid="Base_Column_List"/>)
+        values(
+        #{id}, #{agentId}, #{emptyRechargeMoney}, #{realtimeRechargeMoney}, #{internationalRechargeMoney}, #{directCommonRechargeMoney}, #{lineDirectRechargeMoney}, now(),
+        now(), #{emptyRechargeNumber}, #{realtimeRechargeNumber}, #{internationalRechargeNumber}, #{directCommonRechargeNumber}, #{lineDirectRechargeNumber}, 
+        #{emptyBalance}, #{realtimeBalance},#{internationalBalance},#{directCommonBalance},#{lineDirectBalance},
+        #{custRechargeMoney}, #{custRechargeNum}, #{custRealtimeRechargeMoney}, #{custRealtimeRechargeNum}, #{custInternationalRechargeMoney}, #{custInternationalRechargeNum},
+        #{custDirectCommonRechargeMoney}, #{custDirectCommonRechargeNum},#{custLineDirectRechargeMoney}, #{custLineDirectRechargeNum}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.AgentAccount">
+        insert into agent_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="agentId != null">
+                agent_id,
+            </if>
+            <if test="emptyBalance != null">
+                empty_balance,
+            </if>
+            <if test="emptyWarnNumber != null">
+                empty_warn_number,
+            </if>
+            <if test="emptyCreditNumber != null">
+                empty_credit_number,
+            </if>
+            <if test="autoPresentCfg != null">
+                auto_present_cfg,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="agentId != null">
+                #{agentId,jdbcType=BIGINT},
+            </if>
+            <if test="emptyBalance != null">
+                #{emptyBalance,jdbcType=BIGINT},
+            </if>
+            <if test="emptyWarnNumber != null">
+                #{emptyWarnNumber,jdbcType=BIGINT},
+            </if>
+            <if test="emptyCreditNumber != null">
+                #{emptyCreditNumber,jdbcType=BIGINT},
+            </if>
+            <if test="autoPresentCfg != null">
+                #{autoPresentCfg,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.AgentAccount">
+        update agent_account
+        <set>
+            <if test="agentId != null">
+                agent_id = #{agentId,jdbcType=BIGINT},
+            </if>
+            <if test="emptyBalance != null">
+                empty_balance = #{emptyBalance,jdbcType=BIGINT},
+            </if>
+            <if test="emptyWarnNumber != null">
+                empty_warn_number = #{emptyWarnNumber,jdbcType=BIGINT},
+            </if>
+            <if test="emptyCreditNumber != null">
+                empty_credit_number = #{emptyCreditNumber,jdbcType=BIGINT},
+            </if>
+            <if test="autoPresentCfg != null">
+                auto_present_cfg = #{autoPresentCfg,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AgentAccount">
+        UPDATE agent_account
+        SET agent_id            = #{agentId,jdbcType=BIGINT},
+            empty_balance       = #{emptyBalance,jdbcType=BIGINT},
+            empty_warn_number   = #{emptyWarnNumber,jdbcType=BIGINT},
+            empty_credit_number = #{emptyCreditNumber,jdbcType=BIGINT},
+            auto_present_cfg    = #{autoPresentCfg,jdbcType=INTEGER},
+            version             = #{version,jdbcType=INTEGER},
+            create_time         = #{createTime,jdbcType=TIMESTAMP},
+            update_time         = #{updateTime,jdbcType=TIMESTAMP}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryOneByAgentId" parameterType="HashMap" resultType="com.cc.oem.modules.agent.entity.AgentAccount">
+        select
+        <include refid="Base_Column_List"/>
+        from agent_account
+        where agent_id = #{agentId}
+    </select>
+
+    <update id="addEmptyBalanceByAgentId">
+        UPDATE agent_account
+        set
+        update_time = now(),
+        <choose>
+            <when test="agentRecharge.category==0">
+                empty_balance = ifnull(empty_balance,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER},
+                empty_recharge_money =ifnull(empty_recharge_money,0)+ #{agentRecharge.paymentAmount,jdbcType=INTEGER},
+                empty_recharge_number = ifnull(empty_recharge_number,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER}
+            </when>
+            <when test="agentRecharge.category==1">
+                realtime_balance = ifnull(realtime_balance,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER},
+                realtime_recharge_money =ifnull(realtime_recharge_money,0)+ #{agentRecharge.paymentAmount,jdbcType=INTEGER},
+                realtime_recharge_number = ifnull(realtime_recharge_number,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER}
+            </when>
+            <when test="agentRecharge.category==2">
+                international_balance = ifnull(international_balance,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER},
+                international_recharge_money =ifnull(international_recharge_money,0)+ #{agentRecharge.paymentAmount,jdbcType=INTEGER},
+                international_recharge_number = ifnull(international_recharge_number,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER}
+            </when>
+            <when test="agentRecharge.category==4">
+                direct_common_balance = ifnull(direct_common_balance,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER},
+                direct_common_recharge_money =ifnull(direct_common_recharge_money,0)+ #{agentRecharge.paymentAmount,jdbcType=INTEGER},
+                direct_common_recharge_number = ifnull(direct_common_recharge_number,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER}
+            </when>
+            <when test="agentRecharge.category==5">
+                line_direct_balance = ifnull(line_direct_balance,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER},
+                line_direct_recharge_money =ifnull(line_direct_recharge_money,0)+ #{agentRecharge.paymentAmount,jdbcType=INTEGER},
+                line_direct_recharge_number = ifnull(line_direct_recharge_number,0)+#{agentRecharge.rechargeNumber,jdbcType=INTEGER}
+            </when>
+        </choose>
+        <where>
+            agent_id = #{agentRecharge.agentId}
+        </where>
+    </update>
+
+    <update id="updateByAgentIdSelective" parameterType="com.cc.oem.modules.agent.entity.AgentAccount">
+        update agent_account
+        <set>
+            <if test="emptyBalance != null">
+                empty_balance = #{emptyBalance,jdbcType=BIGINT},
+            </if>
+            <if test="emptyWarnNumber != null">
+                empty_warn_number = #{emptyWarnNumber,jdbcType=BIGINT},
+            </if>
+            <if test="emptyCreditNumber != null">
+                empty_credit_number = #{emptyCreditNumber,jdbcType=BIGINT},
+            </if>
+            <if test="autoPresentCfg != null">
+                auto_present_cfg = #{autoPresentCfg,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where agent_id = #{agentId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getAgentAccountOneByUserId" parameterType="java.lang.Integer"
+            resultType="com.cc.oem.modules.agent.entity.AgentAccount">
+        SELECT
+        t1.*
+        FROM agent_account t1
+        INNER JOIN agent_cre_user t2 ON t1.agent_id = t2.agent_id
+        WHERE t2.cre_user_id = #{creUserId}
+        ORDER BY t2.create_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="stasticsData" resultType="com.cc.oem.modules.agent.model.data.records.StaticsAgentAccountData">
+        select count(1) agentNum, sum(empty_recharge_money) totalEmptyRechargeMoney,sum(empty_recharge_number) totalEmptyRechargeNumber,
+        						  sum(realtime_recharge_number) totalRealtimeRechargeNumber,sum(empty_balance) totalEmptyBalance,sum(realtime_balance) totalRealtimeBalance
+        from agent_account
+    </select>
+    
+    <select id="stasticsDataNew" resultType="com.cc.oem.modules.agent.model.data.records.StaticsAgentAccountData">
+        SELECT count(1) agentNum
+             ,ifnull(SUM(IFNULL(empty_recharge_num,0)),0) totalEmptyRechargeNumber
+		     ,ifnull(SUM(IFNULL(empty_recharge_money,0)),0) totalEmptyRechargeMoney
+			 ,ifnull(SUM(IFNULL(realtime_recharge_num,0)),0) totalRealtimeRechargeNumber
+			 ,ifnull(SUM(IFNULL(realtime_recharge_money,0)),0) totalRealtimeRechargeMoney
+			 ,ifnull(SUM(IFNULL(international_recharge_num,0)),0) totalInternationalRechargeNumber
+			 ,ifnull(SUM(IFNULL(international_recharge_money,0)),0) totalInternationalRechargeMoney
+			 
+			 ,ifnull(SUM(IFNULL(direct_common_recharge_num,0)),0) totalDirectCommonRechargeNumber
+			 ,ifnull(SUM(IFNULL(direct_common_recharge_money,0)),0) totalDirectCommonRechargeMoney
+			 ,ifnull(SUM(IFNULL(line_direct_recharge_num,0)),0) totalLineDirectRechargeNumber
+			 ,ifnull(SUM(IFNULL(line_direct_recharge_money,0)),0) totalLineDirectRechargeMoney
+		FROM `oem_cust_daily_recharge`
+		where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01') ]]>
+    </select>
+
+    <select id="stasticsDataOfAgent" resultType="com.cc.oem.modules.agent.model.data.records.StaticsAgentAccountData">
+        select empty_balance totalEmptyBalance,realtime_balance totalRealtimeBalance,
+               cust_recharge_money,cust_recharge_num,
+               cust_realtime_recharge_money,cust_realtime_recharge_num
+        from agent_account
+        <where>
+            <if test="agentId!=null">
+                agent_id = #{agentId}
+            </if>
+        </where>
+
+    </select>
+    
+    <select id="stasticsDataOfAgentNew" resultType="com.cc.oem.modules.agent.model.data.records.StaticsAgentAccountData">
+        select ifnull(aa.empty_balance,0) totalEmptyBalance,
+	     	 ifnull(aa.realtime_balance,0) totalRealtimeBalance,
+			 ifnull(aa.international_balance,0) totalInternationalBalance,
+			 
+			 ifnull(aa.direct_common_balance,0) totalDirectCommonBalance,
+			 ifnull(aa.line_direct_balance,0) totalLineDirectBalance,
+			 
+       		 ifnull(sum(ifnull(ad.empty_consume,0)),0) emptyConsume,
+			 ifnull(sum(ifnull(ad.empty_recharge_num,0)),0) custRechargeNumberSum,
+			 ifnull(sum(ifnull(ad.empty_recharge_money,0)),0) custRechargeSum,
+			 ifnull(sum(ifnull(ad.realtime_consume,0)),0) realTimeConsume,
+			 ifnull(sum(ifnull(ad.realtime_recharge_num,0)),0) custRealtimeRechargeNumberSum,
+			 ifnull(sum(ifnull(ad.realtime_recharge_money,0)),0) custRealtimeRechargeSum,
+			 ifnull(sum(ifnull(ad.international_consume,0)),0) internationalConsume,
+			 ifnull(sum(ifnull(ad.international_recharge_num,0)),0) custInternationalRechargeNum,
+			 ifnull(sum(ifnull(ad.international_recharge_money,0)),0) custInternationalRechargeMoney,
+			 
+			 ifnull(sum(ifnull(ad.direct_common_consume,0)),0) directCommonConsume,
+			 ifnull(sum(ifnull(ad.direct_common_recharge_num,0)),0) custDirectCommonRechargeNum,
+			 ifnull(sum(ifnull(ad.direct_common_recharge_money,0)),0) custDirectCommonRechargeMoney,
+			 ifnull(sum(ifnull(ad.line_direct_consume,0)),0) lineDirectConsume,
+			 ifnull(sum(ifnull(ad.line_direct_recharge_num,0)),0) custLineDirectRechargeNum,
+			 ifnull(sum(ifnull(ad.line_direct_recharge_money,0)),0) custLineDirectRechargeMoney
+		from agent_account aa
+		left join oem_agent_daily_info ad on ad.agent_id = aa.agent_id
+		and ad.day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and ad.day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01') ]]>
+        <where>
+            <if test="agentId!=null">
+                aa.agent_id = #{agentId}
+            </if>
+        </where>
+
+    </select>
+
+    <update id="updateAgentAccountByAgentId">
+        update agent_account
+        <set>
+            <if test="emptyBalance != null">
+                empty_balance =ifnull(empty_balance,0)+ #{emptyBalance},
+            </if>
+            <if test="emptyRechargeNumber != null">
+                empty_recharge_number =ifnull(empty_recharge_number,0)+ #{emptyRechargeNumber},
+            </if>
+            <if test="emptyRechargeMoney != null">
+                empty_recharge_money =ifnull(empty_recharge_money,0)+ #{emptyRechargeMoney},
+            </if>
+            <if test="realtimeRechargeMoney != null">
+                realtime_recharge_money =ifnull(realtime_recharge_money,0)+ #{realtimeRechargeMoney},
+            </if>
+            <if test="realtimeRechargeNumber != null">
+                realtime_recharge_number = ifnull(realtime_recharge_number,0)+#{realtimeRechargeNumber},
+            </if>
+            <if test="realtimeBalance != null">
+                realtime_balance =ifnull(realtime_balance,0)+ #{realtimeBalance},
+            </if>
+            <if test="internationalRechargeMoney != null">
+                international_recharge_money =ifnull(international_recharge_money,0)+ #{internationalRechargeMoney},
+            </if>
+            <if test="internationalRechargeNumber != null">
+                international_recharge_number = ifnull(international_recharge_number,0)+#{internationalRechargeNumber},
+            </if>
+            <if test="internationalBalance != null">
+                international_balance =ifnull(international_balance,0)+ #{internationalBalance},
+            </if>
+            
+            <if test="directCommonRechargeMoney != null">
+                direct_common_recharge_money =ifnull(direct_common_recharge_money,0)+ #{directCommonRechargeMoney},
+            </if>
+            <if test="directCommonRechargeNumber != null">
+                direct_common_recharge_number = ifnull(direct_common_recharge_number,0)+#{directCommonRechargeNumber},
+            </if>
+            <if test="directCommonBalance != null">
+                direct_common_balance =ifnull(direct_common_balance,0)+ #{directCommonBalance},
+            </if>
+            <if test="lineDirectRechargeMoney != null">
+                line_direct_recharge_money =ifnull(line_direct_recharge_money,0)+ #{lineDirectRechargeMoney},
+            </if>
+            <if test="lineDirectRechargeNumber != null">
+                line_direct_recharge_number = ifnull(line_direct_recharge_number,0)+#{lineDirectRechargeNumber},
+            </if>
+            <if test="lineDirectBalance != null">
+                line_direct_balance =ifnull(line_direct_balance,0)+ #{lineDirectBalance},
+            </if>
+            
+            <if test="custRechargeMoney != null">
+                cust_recharge_money = ifnull(cust_recharge_money,0)+#{custRechargeMoney},
+            </if>
+            <if test="custRechargeNum != null">
+                cust_recharge_num =ifnull(cust_recharge_num ,0)+ #{custRechargeNum},
+            </if>
+            
+            <if test="custRealtimeRechargeNum != null">
+                cust_realtime_recharge_num = ifnull(cust_realtime_recharge_num,0)+#{custRealtimeRechargeNum},
+            </if>
+            <if test="custRealtimeRechargeMoney != null">
+                cust_realtime_recharge_money =ifnull(cust_realtime_recharge_money,0)+ #{custRealtimeRechargeMoney},
+            </if>
+            
+            <if test="custInternationalRechargeNum != null">
+                cust_international_recharge_num = ifnull(cust_international_recharge_num,0)+#{custInternationalRechargeNum},
+            </if>
+            <if test="custInternationalRechargeMoney != null">
+                cust_international_recharge_money =ifnull(cust_international_recharge_money,0)+ #{custInternationalRechargeMoney},
+            </if>
+            
+            <if test="custDirectCommonRechargeNum != null">
+                cust_direct_common_recharge_num = ifnull(cust_direct_common_recharge_num,0)+#{custDirectCommonRechargeNum},
+            </if>
+            <if test="custDirectCommonRechargeMoney != null">
+                cust_direct_common_recharge_money =ifnull(cust_direct_common_recharge_money,0)+ #{custDirectCommonRechargeMoney},
+            </if>
+            
+            <if test="custLineDirectRechargeNum != null">
+                cust_line_direct_recharge_num = ifnull(cust_line_direct_recharge_num,0)+#{custLineDirectRechargeNum},
+            </if>
+            <if test="custLineDirectRechargeMoney != null">
+                cust_line_direct_recharge_money =ifnull(cust_line_direct_recharge_money,0)+ #{custLineDirectRechargeMoney},
+            </if>
+        </set>
+        where agent_id = #{agentId}
+    </update>
+
+    <update id="plusEmptyBalanceByAgentId">
+        UPDATE agent_account
+        <set>
+            update_time = now(),
+            <choose>
+                <when test="category==0">
+                    empty_balance = empty_balance-#{refundNumber,jdbcType=INTEGER}
+                </when>
+                <when test="category==1">
+                    realtime_balance = realtime_balance-#{refundNumber,jdbcType=INTEGER}
+                </when>
+                <when test="category==2">
+                    international_balance = international_balance-#{refundNumber,jdbcType=INTEGER}
+                </when>
+                <when test="category==4">
+                    direct_common_balance = direct_common_balance-#{refundNumber,jdbcType=INTEGER}
+                </when>
+                <when test="category==5">
+                    line_direct_balance = line_direct_balance-#{refundNumber,jdbcType=INTEGER}
+                </when>
+            </choose>
+        </set>
+        <where>
+            agent_id = #{agentId}
+        </where>
+    </update>
+
+    <select id="queryList" resultType="com.cc.oem.modules.agent.entity.AgentAccount">
+        select * from agent_account
+    </select>
+
+    <insert id="batchSave">
+        insert into agent_account (agent_id, empty_recharge_money, realtime_recharge_money, create_time,
+        update_time, empty_recharge_number, realtime_recharge_number, empty_balance, realtime_balance,
+        cust_recharge_money, cust_recharge_num, cust_realtime_recharge_money, cust_realtime_recharge_num)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item}, 0, 0, now(),
+            now(), 0, 0, 0, 0,0, 0, 0,0
+            )
+        </foreach>
+
+    </insert>
+
+    <select id="findAllAgentAccount" resultType="java.lang.Long">
+        select agent_id from agent_account
+    </select>
+
+    <update id="updateAgentRechargeInfo">
+        update agent_account set
+        empty_recharge_money = empty_recharge_money+#{emptyRechargeMoney},
+        realtime_recharge_money = realtime_recharge_money+#{realtimeRechargeMoney},
+        empty_recharge_number=empty_recharge_number+#{emptyRechargeNumber}, realtime_recharge_number=realtime_recharge_number+#{realtimeRechargeNumber},
+        empty_balance=empty_balance+#{emptyBalance}, realtime_balance=realtime_balance+#{realtimeBalance},
+        update_time = now()
+        where agent_id = #{agentId}
+    </update>
+
+    <update id="updateCustRechargeInfo">
+        update agent_account set
+        empty_balance = empty_balance - #{emptyRechargeNumber},
+        realtime_balance = realtime_balance -#{realtimeRechargeNumber},
+        cust_recharge_money = cust_recharge_money+#{emptyRechargeMoney},
+        cust_recharge_num = cust_recharge_num+#{emptyRechargeNumber},
+        cust_realtime_recharge_money=cust_realtime_recharge_money+#{realtimeRechargeMoney},
+        cust_realtime_recharge_num=cust_realtime_recharge_num+#{realtimeRechargeNumber},
+        update_time = now()
+        where agent_id = #{agentId}
+    </update>
+
+    <update id="addRefundOfAgent">
+        update agent_account set
+        empty_balance = empty_balance + #{emptyRechargeNumber},
+        realtime_balance = realtime_balance +#{realtimeRechargeNumber},
+        update_time = now()
+        where agent_id = #{agentId}
+    </update>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.NewsMapper">
+    <sql id="Base_Column_List">
+        id,agent_id, agent_name, title,
+          content, state, remark,
+          version, create_time, update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="com.cc.oem.modules.agent.entity.News">
+        select
+        <include refid="Base_Column_List"/>
+        from news
+        where id = #{id}
+    </select>
+
+
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.News">
+            insert into news (id,agent_id, agent_name, title,
+              content, state, remark,
+              version, create_time, update_time)
+            values (#{id,jdbcType=BIGINT},#{agentId,jdbcType=BIGINT}, #{agentName,jdbcType=VARCHAR},
+              #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},  #{version,jdbcType=VARCHAR},
+              #{createtime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <select id="queryNewsList"
+            parameterType="com.cc.oem.modules.agent.model.param.NewsInfoParam"
+            resultType="com.cc.oem.modules.agent.model.data.NewsInfoData">
+        select news.id,ag.company_name as agentName,news.title,
+        news.create_time as commitTime,
+        news.update_time as auditTime,
+        news.state as auditState,
+        news.remark as auditRemark
+        from news
+        INNER JOIN agent as ag on news.agent_id = ag.id
+        <where>
+            <if test="agentId != null and agentId !=''">
+                and news.agent_id= #{agentId}
+            </if>
+            <if test="agentName != null and agentName !=''">
+                and ag.company_name like concat('%',#{agentName},'%')
+            </if>
+            <if test="auditState != null and auditState !='' or auditState==0 ">
+                and news.state= #{auditState}
+            </if>
+            <if test="agentMobile!=null and  agentMobile!=''">
+                and ag.linkman_phone like concat('%',#{agentMobile},'%')
+            </if>
+        </where>
+        order by news.create_time desc
+    </select>
+
+    <update id="auditNews" parameterType="java.util.Map">
+        update news
+        <set>
+            state = #{auditState,jdbcType=INTEGER},
+            update_time = NOW(),
+            <if test="auditRemark != null and auditRemark !=''">
+                remark = #{auditRemark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id} and state in (1,2);
+    </update>
+
+    <update id="deleteNews">
+        update news
+        set
+            state = 5,
+            update_time = NOW()
+
+        where id = #{id} and state &lt;&gt; 5
+        <if test="agentId!=null and  agentId!=''">
+            and agent_id = #{agentId}
+        </if>
+    </update>
+
+
+    <select id="countByCreateByWithinSeconds" parameterType="java.util.Map" resultType="java.lang.Long">
+
+                SELECT count(0)
+                from news
+                where agent_id= #{agentId} and TIMESTAMPDIFF(SECOND,news.create_time,NOW()) &lt; #{seconds,jdbcType=BIGINT}
+
+    </select>
+
+    <update id="modifyNews" parameterType="com.cc.oem.modules.agent.entity.News">
+        update news
+        <set>
+            title = #{title,jdbcType=VARCHAR},
+            content = #{content,jdbcType=VARCHAR},
+            state = #{state,jdbcType=INTEGER},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            remark = #{remark,jdbcType=VARCHAR}
+        </set>
+        where id = #{id} and state in (0,1,2,3)
+    </update>
+</mapper>

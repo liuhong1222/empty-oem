@@ -1,0 +1,129 @@
+server:
+    port: 8658
+    tomcat:
+        basedir: /opt/upload/temp
+
+spring:
+    profiles:
+        active: prod
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://rm-bp1go8w41514d3003.mysql.rds.aliyuncs.com:3306/spring_boot_plus?useUnicode=true&characterEncoding=utf-8&useSSL=false&useServerPrepStmts=false&useCompression=true&rewriteBatchedStatements=true
+        username: root
+        password: Zhongzhi@123
+        initial-size: 100
+        max-active: 600
+        min-idle: 300
+        max-wait: 60000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1 FROM DUAL
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        stat-view-servlet:
+            enabled: true
+            url-pattern: /druid/*
+        filter:
+            stat:
+                log-slow-sql: true
+                slow-sql-millis: 1000
+                merge-sql: true
+            wall:
+                config:
+                    multi-statement-allow: true
+    redis:
+        open: true  # 是否开启redis缓存  true开启   false关闭
+        database: 0
+        host: r-bp15yj1ipg8ox74x45.redis.rds.aliyuncs.com
+        port: 6379
+        password: Zhongzhi@123    # 密码（默认为空）
+        timeout: 6000  # 连接超时时长（毫秒）
+        lettuce:
+            pool:
+                max-active: 500
+                min-idle: 50
+                max-idle: 200
+                max-wait: 10000
+
+---
+#email
+spring:
+    mail:
+        host: smtp.163.com
+        username: zzxltxkhjc@163.com
+        password: GJHPOOWZDZOFOTOC
+        port: 465
+        #设置为SSL协议
+        properties:
+            from: zzxltxkhjc@163.com
+            mail:
+                smtp:
+                    socketFactory:
+                        class: javax.net.ssl.SSLSocketFactory
+
+pagehelper:
+    helper-dialect: mysql
+    reasonable: true
+    support-methods-arguments: true
+    params : count=countSql
+
+# 上传文件路径
+fileUploadPath:
+    common: /opt/upload/
+    mobileCube: /opt/upload/
+    picture:
+        license: businessLicense
+    agreement: /opt/upload/
+
+# 文件上传下载配置
+# 上传路径配置
+upload-path: /opt/upload/
+# 资源访问路径
+resource-access-path: resource/
+# 资源访问路径匹配：/resource/**
+resource-access-patterns: ${spring-boot-plus.resource-access-path}**
+# 资源访问全路径前缀：http://localhost:8888/resource/
+resource-access-url: http://${server.domain}${server.servlet.context-path}${spring-boot-plus.resource-access-path}
+# 全局允许上传的类型
+allow-upload-file-extensions: jpg,png,docx,xlsx,pptx,pdf,txt,zip
+allow-download-file-extensions: jpg,png,docx,xlsx,pptx,pdf,txt,zip
+
+#oemocr验证
+oem_ocr:
+    url: https://api.253.com/open/qtsb/bus_license
+    apiName: pa1Ji2dT
+    password: U82xVQXX
+
+# 支付宝配置
+alipay_appid: 2021001145628029
+alipay_payurl: https://openapi.alipay.com/gateway.do
+alipay_callbackurl: http://121.196.227.52:8658/open/agent/fund/rechargeCallBack
+alipay_publickey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjqVdTdRZ4EivFRI4Q40Z4aDOjMm+uNrcQnfDEzp+kInCjyobLKzZ3QjNP3rrsTpkB5KIO5diAgD1gRVUH0d3QWYsSFMj01KjCnoegk4L4PNOIu9MvFtb66kgQvOmh2uQ08HwAPUFXtimKx/5zaQ1RX2V42n5mdSLAFHSt+mcJ9MvtrZVbpkhZFCMvwVmGaqBa3ZlgranQTKRoqNVUwrSIRtXXJpknQ/aKQo3m9bOGUmUWHwluSThrbo0xbUeYlh9F3lAC6U8NKpW/CAKlKhyLs/40sNeUhgWqpergXu3Xk5Q9T4/M9Vz+XtbsEFwcrxy4UBOToSg3sb2/J20Vr/RpwIDAQAB
+alipay_privatekey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQChk2eWpPG7rsGf/qKe8egPQ8AEVa5d+skxvc4utbvu9DEgLX649oaJKxeUnuqp2n5qwHuyHyspMnfz48iW3O/l7CQl9WwbynLc8cryv5uVUOdcS+cvbUD+vgsx/tO80NGSDwgADYSts12DGZiVXZ+AsAow/8KJBILOK3W6ORKutjR57oYOzPhLC8W8ZKlWywonin3nC1GnJvtunppV4n6Mi6RtklZmtiJzm657hrcdLh0uwXyRucWyiPHZJ0xgA3ZjM86r2Yh42Oo9f7MjCgUxK/e2HrJ8dDzO8J1J/k+CRDQa57R+CmzF9hnYvpk+N1v0qii12zf3/HPIEXSdTMjBAgMBAAECggEAelk+RYpdKftozxhoV+diC70Ht8CRqsRueWX6rNAcoRLz6CPLI5A5y8B/uKClnTzAIWHjyLtlWWrH/jxr9iES343yyXOQC3M/iyLkxPBmhaifqPoo83bNkpihrZgDCaUuLGWJb1DNOSLrGozVR7V/RFkJPpVM36g0zJ2IJh11kilc7xGcz8GtBjligMfrEM5LVPZytERq7ISNZCDsnhAmqxQeomXKBc+KZOiqnnsimD/0vuTwDNwjOSp+mu9Asg1HtEftXbpTt5nUMC1gNPJ6XxVA+By0diRiIevMC8xn2b/8jQrpRmSnjJ+sp0ZlsD6s8Ln6js1klJHjzd2IPDvKiQKBgQDhSskz3sDRuz3sBpARo587T1qD3+5/QoQvmMJ/qcM6y32vTKuilBoRM2yFP7bh41UkwuKJ0+x0Eb+5ZGWmYMXXNkjs68OVdp4qUKHV3IpxN9Xop2XsJ/AVrBd9+qb4z4MRc3evgtMvVxBkhfzAyW+dSb0BPvXrpMBMAknlus6gAwKBgQC3mVZucHnG4Xuo+z4BAOds0IXbyNJwb+JkSeqAzATUCzMxlaCi55ON/ksU7xBMo90stviiEo5/RluCR0TNXvar/dzfeNZA/yBZYgKUyQcWWBIETMqkH9UW9QzyFN8VYSLZBoC2BGtHs9c0wY7nmTVT41YAPq18ROwyAitbCsqi6wKBgQDQ9N1S98rdfA59yMR9J8Z7ayln4R3C+P3Da6sSX3FNKgoDulgC7dyTkZ+YozTLpF+HPh6BeYb5TLEHkb/aJi25Y4cV/8Ii8abXVnwT8H6Tbhc/t2uIMq6yWzBaz01ovocxe2hJ6ExZvyXcJo38fZjBSPA9pJjRG7ijhwflRHN64wKBgCN/Sx25M2JHcEBAq0FIanY4btkKn91LVIstW2ChkYFp1PEOS+uTOI0okF2wxwb6W6Xsjm/PhKuI7+JlYyEN7kVcpNq0I0CX0ypU78jSgUNJrdoU+sz2tp1kracUb/lTOYiaYEJQ4mkPlVlG3xlaHtxkRNlxRNuU+9HDZ5yHnpwXAoGBAIrQsuWhpQuLSBfJiIUO1pvNgroeqxngdW6gEG+myYy8l8KhM09E4+o5GB8qBaFR57nnBgwrsA2TRWuHoZCeBsGJE9r+hGATTYcb96vw0AXphyzhWUJZV8zxzCYEZDqI9RiJNGSMT20Zo4wnX4Dh629d4BMzQnAlNtmnGR5exXde
+
+ueditorConfigPath: editor/config-dev.json
+
+empty:
+    dingding:
+        url: https://oapi.dingtalk.com/robot/send?access_token=52edbf36b9d67abd35fc3669771f0bae24df7c878117ed89a1f3ca0dd15e4f9f
+
+#新增加
+notifymessage:
+    account: "zhangxm_khjc"
+    notifyMsg: "【%s】您的验证码是：%s"
+    pswd: "Zhongzhi123"
+    smsUrl: "http://118.178.188.81/msg/HttpBatchSendSM"
+    sign: "朱雀网络"
+
+snowflake:
+    work-id: 4
+    data-center-id: 4
+
+swagger:
+    enable: false
+
+

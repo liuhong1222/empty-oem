@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentMapper">
+
+    <sql id="Base_Column_List">
+            authentication_limit_level,id, linkman_name, linkman_phone, linkman_email, business_license_path, company_name, 
+            company_short_name, business_license_address, business_license_number, legal_person, business_license_expire_start_time, 
+            business_license_expire_end_time, agent_level, price, min_payment_amount, min_recharge_number, warnings_number, 
+            register_gift, state, remark, version, create_time, update_time, 
+            real_level, real_price, real_min_payment_amount, real_min_recharge_number, real_warnings_number,
+            international_level, international_price, international_min_payment_amount, international_min_recharge_number, international_warnings_number,
+            direct_common_level, direct_common_price, direct_common_min_payment_amount, direct_common_min_recharge_number, direct_common_warnings_number,
+            line_direct_level, line_direct_price, line_direct_min_payment_amount, line_direct_min_recharge_number, line_direct_warnings_number
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        <include refid="Base_Column_List"/>
+        from agent
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from agent
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.Agent">
+
+    insert into agent (id, linkman_name, linkman_phone, linkman_email, business_license_path, company_name, company_short_name, business_license_address, business_license_number, legal_person, business_license_expire_start_time,
+    business_license_expire_end_time, agent_level, price, min_payment_amount, min_recharge_number, warnings_number, register_gift, state, remark, version, create_time, update_time,
+    real_level, real_price, real_min_payment_amount, real_min_recharge_number, real_warnings_number,
+    international_level, international_price, international_min_payment_amount, international_min_recharge_number, international_warnings_number,
+    direct_common_level, direct_common_price, direct_common_min_payment_amount, direct_common_min_recharge_number, direct_common_warnings_number,
+    line_direct_level, line_direct_price, line_direct_min_payment_amount, line_direct_min_recharge_number, line_direct_warnings_number
+    )
+    values (
+        #{id,jdbcType=BIGINT},#{linkmanPhone,jdbcType=VARCHAR},#{linkmanEmail,jdbcType=VARCHAR},#{businessLicensePath,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR},
+        #{companyShortName,jdbcType=VARCHAR},#{businessLicenseAddress,jdbcType=VARCHAR},#{businessLicenseNumber,jdbcType=VARCHAR},#{legalPerson,jdbcType=VARCHAR},#{businessLicenseExpireStartTime,jdbcType=VARCHAR},
+        #{businessLicenseExpireEndTime,jdbcType=VARCHAR},#{agentLevel,jdbcType=VARCHAR},#{price,jdbcType=DECIMAL},#{minPaymentAmount,jdbcType=BIGINT},#{minRechargeNumber,jdbcType=BIGINT},
+        #{warningsNumber,jdbcType=BIGINT},#{registerGift,jdbcType=BIGINT},#{state,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR},#{version,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},
+        #{realLevel,jdbcType=VARCHAR},#{realPrice,jdbcType=DECIMAL},#{realMinPaymentAmount,jdbcType=BIGINT},#{realMinRechargeNumber,jdbcType=BIGINT},#{realWarningsNumber,jdbcType=BIGINT},
+        #{internationalLevel,jdbcType=VARCHAR},#{internationalPrice,jdbcType=DECIMAL},#{internationalMinPaymentAmount,jdbcType=BIGINT},#{internationalMinRechargeNumber,jdbcType=BIGINT},#{internationalWarningsNumber,jdbcType=BIGINT},
+        #{directCommonLevel,jdbcType=VARCHAR},#{directCommonPrice,jdbcType=DECIMAL},#{directCommonMinPaymentAmount,jdbcType=BIGINT},#{directCommonMinRechargeNumber,jdbcType=BIGINT},#{directCommonWarningsNumber,jdbcType=BIGINT},
+        #{lineDirectLevel,jdbcType=VARCHAR},#{lineDirectPrice,jdbcType=DECIMAL},#{lineDirectMinPaymentAmount,jdbcType=BIGINT},#{lineDirectMinRechargeNumber,jdbcType=BIGINT},#{lineDirectWarningsNumber,jdbcType=BIGINT}
+      )
+  </insert>
+    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.cc.oem.modules.agent.entity.Agent">
+        insert into agent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            linkman_name,
+            <if test="linkmanPhone != null">
+                linkman_phone,
+            </if>
+            <if test="linkmanEmail != null">
+                linkman_email,
+            </if>
+            <if test="businessLicensePath != null">
+                business_license_path,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="companyShortName != null">
+                company_short_name,
+            </if>
+            <if test="businessLicenseAddress != null">
+                business_license_address,
+            </if>
+            <if test="businessLicenseNumber != null">
+                business_license_number,
+            </if>
+            <if test="legalPerson != null">
+                legal_person,
+            </if>
+            <if test="businessLicenseExpireStartTime != null">
+                business_license_expire_start_time,
+            </if>
+            <if test="businessLicenseExpireEndTime != null">
+                business_license_expire_end_time,
+            </if>
+            <if test="agentLevel != null">
+                agent_level,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="minPaymentAmount != null">
+                min_payment_amount,
+            </if>
+            <if test="minRechargeNumber != null">
+                min_recharge_number,
+            </if>
+            <if test="warningsNumber != null">
+                warnings_number,
+            </if>
+            <if test="registerGift != null">
+                register_gift,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="realLevel != null">
+                real_level,
+            </if>
+            <if test="realPrice != null">
+                real_price,
+            </if>
+            <if test="realMinPaymentAmount != null">
+                real_min_payment_amount,
+            </if>
+            <if test="realMinRechargeNumber != null">
+                real_min_recharge_number,
+            </if>
+            <if test="realWarningsNumber != null">
+                real_warnings_number,
+            </if>
+            <if test="internationalLevel != null">
+                international_level,
+            </if>
+            <if test="internationalPrice != null">
+                international_price,
+            </if>
+            <if test="internationalMinPaymentAmount != null">
+                international_min_payment_amount,
+            </if>
+            <if test="internationalMinRechargeNumber != null">
+                international_min_recharge_number,
+            </if>
+            <if test="internationalWarningsNumber != null">
+                international_warnings_number,
+            </if>
+            
+            <if test="directCommonLevel != null">
+                direct_common_level,
+            </if>
+            <if test="directCommonPrice != null">
+                direct_common_price,
+            </if>
+            <if test="directCommonMinPaymentAmount != null">
+                direct_common_min_payment_amount,
+            </if>
+            <if test="directCommonMinRechargeNumber != null">
+                direct_common_min_recharge_number,
+            </if>
+            <if test="directCommonWarningsNumber != null">
+                direct_common_warnings_number,
+            </if>
+            
+            <if test="lineDirectLevel != null">
+                line_direct_level,
+            </if>
+            <if test="lineDirectPrice != null">
+                line_direct_price,
+            </if>
+            <if test="lineDirectMinPaymentAmount != null">
+                line_direct_min_payment_amount,
+            </if>
+            <if test="lineDirectMinRechargeNumber != null">
+                line_direct_min_recharge_number,
+            </if>
+            <if test="lineDirectWarningsNumber != null">
+                line_direct_warnings_number,
+            </if>
+            
+            <if test="authenticationLimitLevel!=null">
+                authentication_limit_level,
+            </if>
+                create_time,
+                update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            #{linkmanName,jdbcType=VARCHAR},
+            <if test="linkmanPhone != null">
+                #{linkmanPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanEmail != null">
+                #{linkmanEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicensePath != null">
+                #{businessLicensePath,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyShortName != null">
+                #{companyShortName,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseAddress != null">
+                #{businessLicenseAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseNumber != null">
+                #{businessLicenseNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null">
+                #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseExpireStartTime != null">
+                #{businessLicenseExpireStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseExpireEndTime != null">
+                #{businessLicenseExpireEndTime,jdbcType=VARCHAR},
+            </if>
+            <if test="agentLevel != null">
+                #{agentLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="minPaymentAmount != null">
+                #{minPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="minRechargeNumber != null">
+                #{minRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="warningsNumber != null">
+                #{warningsNumber,jdbcType=BIGINT},
+            </if>
+            <if test="registerGift!= null">
+                #{registerGift,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=BIGINT},
+            </if>
+            <if test="realLevel != null">
+                #{realLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="realPrice != null">
+                #{realPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="realMinPaymentAmount != null">
+                #{realMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="realMinRechargeNumber != null">
+                #{realMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="realWarningsNumber != null">
+                #{realWarningsNumber,jdbcType=BIGINT},
+            </if>
+            <if test="internationalLevel != null">
+                #{internationalLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="internationalPrice != null">
+                #{internationalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="internationalMinPaymentAmount != null">
+                #{internationalMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="internationalMinRechargeNumber != null">
+                #{internationalMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="internationalWarningsNumber != null">
+                #{internationalWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="directCommonLevel != null">
+                #{directCommonLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="directCommonPrice != null">
+                #{directCommonPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="directCommonMinPaymentAmount != null">
+                #{directCommonMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="directCommonMinRechargeNumber != null">
+                #{directCommonMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="directCommonWarningsNumber != null">
+                #{directCommonWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="lineDirectLevel != null">
+                #{lineDirectLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="lineDirectPrice != null">
+                #{lineDirectPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="lineDirectMinPaymentAmount != null">
+                #{lineDirectMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="lineDirectMinRechargeNumber != null">
+                #{lineDirectMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="lineDirectWarningsNumber != null">
+                #{lineDirectWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="authenticationLimitLevel!=null">
+                #{authenticationLimitLevel},
+            </if>
+            now(),now()
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.Agent">
+        update agent
+        <set>
+            <if test="businessLicensePath != null">
+                 business_license_path= #{businessLicensePath,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyShortName != null">
+                company_short_name = #{companyShortName,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanPhone != null">
+                linkman_phone = #{linkmanPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanName != null">
+                linkman_name = #{linkmanName,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanEmail != null">
+                linkman_email = #{linkmanEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseAddress != null">
+                business_license_address = #{businessLicenseAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null">
+                legal_person = #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseNumber != null">
+                business_license_number = #{businessLicenseNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseExpireStartTime != null">
+                business_license_expire_start_time = #{businessLicenseExpireStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenseExpireEndTime != null">
+                business_license_expire_end_time = #{businessLicenseExpireEndTime,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="agentLevel != null">
+                agent_level = #{agentLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="minPaymentAmount != null">
+                min_payment_amount = #{minPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="minRechargeNumber != null">
+                min_recharge_number = #{minRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="warningsNumber != null">
+                warnings_number = #{warningsNumber,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=BIGINT},
+            </if>
+            <if test="realLevel != null">
+                real_level = #{realLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="realPrice != null">
+                real_price = #{realPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="realMinPaymentAmount != null">
+                real_min_payment_amount = #{realMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="realMinRechargeNumber != null">
+                real_min_recharge_number = #{realMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="realWarningsNumber != null">
+                real_warnings_number = #{realWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="internationalLevel != null">
+                international_level = #{internationalLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="internationalPrice != null">
+                international_price = #{internationalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="internationalMinPaymentAmount != null">
+                international_min_payment_amount = #{internationalMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="internationalMinRechargeNumber != null">
+                international_min_recharge_number = #{internationalMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="internationalWarningsNumber != null">
+                international_warnings_number = #{internationalWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="directCommonLevel != null">
+                direct_common_level = #{directCommonLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="directCommonPrice != null">
+                direct_common_price = #{directCommonPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="directCommonMinPaymentAmount != null">
+                direct_common_min_payment_amount = #{directCommonMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="directCommonMinRechargeNumber != null">
+                direct_common_min_recharge_number = #{directCommonMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="directCommonWarningsNumber != null">
+                direct_common_warnings_number = #{directCommonWarningsNumber,jdbcType=BIGINT},
+            </if>
+            
+            <if test="lineDirectLevel != null">
+                line_direct_level = #{lineDirectLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="lineDirectPrice != null">
+                line_direct_price = #{lineDirectPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="lineDirectMinPaymentAmount != null">
+                line_direct_min_payment_amount = #{lineDirectMinPaymentAmount,jdbcType=BIGINT},
+            </if>
+            <if test="lineDirectMinRechargeNumber != null">
+                line_direct_min_recharge_number = #{lineDirectMinRechargeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="lineDirectWarningsNumber != null">
+                line_direct_warnings_number = #{lineDirectWarningsNumber,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.Agent">
+    update agent
+    set
+      license_url = #{licenseUrl,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      license_no = #{licenseNo,jdbcType=VARCHAR},
+      effect_date = #{effectDate,jdbcType=VARCHAR},
+      expire_date = #{expireDate,jdbcType=VARCHAR},
+      audit_state = #{auditState,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      delete_flag = #{deleteFlag,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="queryAgentInfoList" parameterType="com.cc.oem.modules.agent.model.param.AgentInfoParam"
+            resultType="com.cc.oem.modules.agent.model.data.AgentInfoData">
+        select ag.id,ag.id agentId, linkman_name, linkman_phone, linkman_email, business_license_path, company_name, company_short_name,
+		        business_license_address, business_license_number, legal_person, business_license_expire_start_time, 
+		        business_license_expire_end_time, agent_level, ag.price, ag.min_payment_amount, ag.min_recharge_number,
+		        ag.warnings_number, register_gift, ag.state, ag.remark, ag.create_time, ag.update_time, real_level,mobile_cube_path,
+		        authentication_limit_level,real_price, real_min_payment_amount, real_min_recharge_number, real_warnings_number,
+		        level1.level offLineLevelName,level2.level realLevelName,level3.level internationalLevelName,
+		        level4.level directCommonLevelName,level5.level lineDirectLevelName,sett.official_web,
+		        ag.international_level,ag.international_price ,ag.international_min_payment_amount , ag.international_min_recharge_number,ag.international_warnings_number,
+		        ag.direct_common_level,ag.direct_common_price ,ag.direct_common_min_payment_amount , ag.direct_common_min_recharge_number,ag.direct_common_warnings_number,
+		        ag.line_direct_level,ag.line_direct_price ,ag.line_direct_min_payment_amount , ag.line_direct_min_recharge_number,ag.line_direct_warnings_number
+        from agent as ag
+        left join agent_settings sett on sett.agent_id = ag.id
+        left JOIN agent_level level1 on ag.agent_level = level1.id
+        left join agent_level level2 on ag.real_level = level2.id
+        left join agent_level level3 on ag.international_level = level3.id
+        
+        left join agent_level level4 on ag.direct_common_level = level2.id
+        left join agent_level level5 on ag.line_direct_level = level3.id
+        
+        <where>
+            <if test="agentId != null and agentId !=''">
+                 ag.id= #{agentId}
+            </if>
+            <if test="agentIdList != null and agentIdList.size()>0">
+                ag.id in
+                (<foreach collection="agentIdList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="companyName != null and companyName !=''">
+                and ag.company_name like concat('%',#{companyName},'%')
+            </if>
+
+            <if test="state != null and state !='' or state==0">
+                and ag.state= #{state}
+            </if>
+            <if test="linkmanPhone != null and linkmanPhone !=''">
+                and ag.linkman_phone like concat(#{linkmanPhone},'%')
+            </if>
+            <if test="startTime != null and startTime !=''">
+                and ag.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime !=''">
+                and ag.create_time &lt;= #{endTime}
+            </if>
+        </where>
+        order by ag.create_time desc
+    </select>
+
+    <select id="queryOneByCompanyName" parameterType="HashMap" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        <include refid="Base_Column_List"/>
+        from agent
+        where company_name = #{companyName}
+    </select>
+
+    <select id="queryOneByLicenseNo" parameterType="HashMap" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        <include refid="Base_Column_List"/>
+        from agent
+        where business_license_number = #{licenseNo}
+    </select>
+
+    <update id="updateStatusById" parameterType="HashMap">
+    update agent
+    set state = #{status}
+    where id = #{id}
+  </update>
+
+    <update id="updateDeleteStatusById" parameterType="HashMap">
+        update agent
+        set delete_flag = #{status}
+        where id = #{id}
+    </update>
+
+
+    <select id="selectAgentBySysUserId" parameterType="java.lang.Long" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        agent.*
+        FROM
+        sys_user userTable
+        LEFT JOIN agent ON userTable.agent_id = agent.id
+        WHERE   userTable.id=#{sysUserId,jdbcType=BIGINT}
+  </select>
+
+    <select id="countCreUserByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long">
+       SELECT
+	      count(t3.id)
+        FROM
+            agent t1
+        LEFT JOIN agent_cre_user t2 ON t1.id = t2.agent_id
+        LEFT JOIN cre_user t3 ON t2.cre_user_id = t3.id
+        INNER JOIN cre_user_account t4 on t3.id=t4.cre_user_id
+        WHERE
+            t1.id = #{agentId,jdbcType=BIGINT}
+        and t2.id is not NULL
+        and t3.id is not NULL
+    </select>
+
+    <select id="countAgent" resultType="java.util.Map">
+        SELECT count(1) emptyAgentNums,sum(case when real_level is not null then 1 else 0 end) realtimeAgentNums
+        	   ,sum(case when international_level is not null then 1 else 0 end) internationalAgentNums
+        	   ,sum(case when direct_common_level is not null then 1 else 0 end) directCommonAgentNums
+        	   ,sum(case when line_direct_level is not null then 1 else 0 end) lineDirectAgentNums
+        from  agent t1
+    </select>
+
+    <update id="updateAuditStateById" parameterType="HashMap">
+    update agent
+    set audit_state = #{auditState}
+    where id = #{id} and audit_state=0
+  </update>
+
+    <select id="queryOneByCreUserId" parameterType="HashMap" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        t1.*
+        from agent t1 ,agent_cre_user t2
+        where t1.id=t2.agent_id
+        and t2.cre_user_id=#{creUserId}
+    </select>
+
+    <select id="queryCompanyNameList" parameterType="HashMap" resultType="string">
+        SELECT t.company_name
+        from agent t
+        where 1=1 and t.company_name like concat('%',#{companyName},'%')
+    </select>
+
+    <select id="queryListByMobile" parameterType="HashMap" resultType="com.cc.oem.modules.agent.entity.Agent">
+        select
+        <include refid="Base_Column_List" />
+        from agent
+        where linkman_phone = #{mobile}
+    </select>
+
+    <update id="updateRegisterGift" >
+        update agent set register_gift = #{registerGift},update_time = now()
+        where id = #{agentId}
+    </update>
+
+    <select id="computAdminToDoNum" resultType="com.cc.oem.modules.agent.model.data.records.WaitTodoData">
+            select count(*) totalNum,'agentSetting' waitToDoType
+            from agent_settings
+            where state = 0
+        union all
+            select count(*) totalNum,'news' waitToDoType
+            from news
+            where state = 0 or state = 1
+        union all
+            select count(*) totalNum,'notice' waitToDoType
+            from notice
+            where state = 0 or state = 1
+        union all
+            select count(*) totalNum,'productGroup' waitToDoType
+            from product_group
+            where apply_state = 0 or apply_state = 1
+        union all
+            select count(*) totalNum,'product' waitToDoType
+            from product
+            where apply_state = 0 or apply_state = 1
+        union all
+            select count(*) totalNum,'faq' waitToDoType
+            from faq
+            where apply_state = 0 or apply_state = 1
+    </select>
+
+    <select id="computAgentToDoNum" resultType="com.cc.oem.modules.agent.model.data.records.WaitTodoData">
+        select count(*) totalNum,'agentSetting' waitToDoType
+            from agent_settings
+            where state = 0 and agent_id = #{agentId}
+        union all
+            select count(*) totalNum,'news' waitToDoType
+            from news
+            where (state = 0 or state = 1) and agent_id = #{agentId}
+        union all
+            select count(*) totalNum,'notice' waitToDoType
+            from notice
+            where (state = 0 or state = 1) and agent_id = #{agentId}
+        union all
+            select count(*) totalNum,'productGroup' waitToDoType
+            from product_group
+            where (apply_state = 0 or apply_state = 1) and agent_id = #{agentId}
+        union all
+            select count(*) totalNum,'product' waitToDoType
+            from product
+            where (apply_state = 0 or apply_state = 1) and agent_id = #{agentId}
+        union all
+            select count(*) totalNum,'faq' waitToDoType
+            from faq
+            where (apply_state = 0 or apply_state = 1) and agent_id = #{agentId}
+    </select>
+
+    <select id="listAgent" resultType="java.util.Map">
+        select company_name companyName,agent.id from agent
+        <if test="officialWeb!=null">
+            inner join agent_settings sett on sett.agent_id = agent.id and sett.official_web =#{officialWeb}
+        </if>
+        <where>
+            <if test="name!=null and name!=''">
+                company_name like concat(#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findAgentListByName" resultType="java.lang.Long">
+        select id from agent where company_name like concat('%',#{name},'%')
+    </select>
+    
+    <select id="findAgentIdList" resultType="java.lang.Long">
+    	select id from agent
+    </select>
+
+    <update id="updateAuthenLevel">
+        update agent set authentication_limit_level = #{level}
+        where id = #{agentId}
+    </update>
+
+    <update id="updateMobileCubePath">
+        update agent 
+        <set>
+        	<if test="fileType != null and fileType == 'national'">
+        		mobile_cube_path =#{path}
+        	</if>
+        	<if test="fileType != null and fileType == 'international'">
+        		international_mobile_cube_path = #{path}
+        	</if>
+        </set>
+        where id = #{agentId}
+    </update>
+
+    <select id="findUsingthisLevel" resultType="java.lang.Long">
+        select id from agent where agent_level=#{level} or real_level=#{level}
+    </select>
+
+    <select id="findAllAgent" resultType="java.lang.Long">
+        select id from agent
+    </select>
+</mapper>

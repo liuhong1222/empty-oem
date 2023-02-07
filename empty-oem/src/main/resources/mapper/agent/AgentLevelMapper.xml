@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentLevelMapper">
+  <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.AgentLevel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="warnings_number" jdbcType="BIGINT" property="warningsNumber" />
+    <result column="min_recharge_number" jdbcType="BIGINT" property="minRechargeNumber" />
+    <result column="min_payment_amount" jdbcType="BIGINT" property="minPaymentAmount" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,level,price, min_recharge_number,min_payment_amount,create_time, update_time,remark,version,warnings_number,level_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from agent_level
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from agent_level
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.AgentLevel">
+    insert into agent_level (id, agent_id, level_id,level_name,
+      price, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{agentId,jdbcType=BIGINT}, #{levelId,jdbcType=BIGINT}, #{levelName,jdbcType=VARCHAR},
+      #{price,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.cc.oem.modules.agent.entity.AgentLevel">
+    insert into agent_level (id,level, price, warnings_number, min_recharge_number, min_payment_amount, remark, update_time, level_type,create_time)
+    values(#{id},#{level}, #{price}, #{warningsNumber}, #{minRechargeNumber}, #{minPaymentAmount}, #{remark}, now(), #{levelType},now())
+  </insert>
+
+  <select id="selectListByNotDeleted" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from agent_level
+    <where>
+      <if test="levelType!=null and levelType!=''">
+        level_type = #{levelType}
+      </if>
+    </where>
+    order by level_type desc,price desc
+  </select>
+
+  <select id="queryOneByLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from agent_level
+    where level = #{level}
+  </select>
+
+  <select id="queryOneByAgentId" resultType="com.cc.oem.modules.agent.entity.AgentLevel">
+    select
+    <include refid="Base_Column_List" />
+    from agent_level level
+    inner join agent on
+    <if test="category==1">
+        real_level = level.id
+    </if>
+    <if test="category==0">
+        agent_level=level.id
+    </if>
+    where agent.id = #{id}
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AgentLevel">
+    update agent_level
+    set
+      warnings_number = #{warningsNumber,jdbcType=INTEGER},
+      min_recharge_number = #{minRechargeNumber,jdbcType=INTEGER},
+      min_payment_amount = #{minPaymentAmount,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      update_time = now(),
+      remark=#{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteOneById" parameterType="HashMap">
+    delete from agent_level
+    where id = #{id}
+  </delete>
+</mapper>

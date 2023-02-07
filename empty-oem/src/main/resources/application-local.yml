@@ -1,0 +1,88 @@
+server:
+    port: 9999
+    tomcat:
+          basedir: d:/data/center_data/temp
+spring:
+    profiles:
+        active: dev
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            first:  #数据源1
+                url: jdbc:mysql://172.16.20.31:3306/credit?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&zeroDateTimeBehavior=convertToNull
+                username: root
+                password: 123456
+            second:  #数据源2
+                url: jdbc:mysql://172.16.20.31:3306/credit?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&zeroDateTimeBehavior=convertToNull
+                username: root
+                password: 123456
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+    redis:
+        open: true  # 是否开启redis缓存  true开启   false关闭
+        database: 0
+        host: 172.16.20.33
+        port: 6379
+        password: kh@253     # 密码（默认为空）
+        timeout: 6000ms  # 连接超时时长（毫秒）
+        lettuce:
+            pool:
+                max-active: 1000
+                min-idle: 100
+                max-idle: 100
+                max-wait: 20000ms
+
+
+pagehelper:
+    helper-dialect: mysql
+    reasonable: true
+    support-methods-arguments: true
+    params : count=countSql
+
+# 上传文件路径
+fileUploadPath: d:/data/center_data/credit/downloadFile
+
+# 公章和签名图片上传路径
+sealImageUploadPath: d:/data/center_data/html
+
+# news upload path
+newsFilePath: d:/data/center_data/oem_news/
+
+#空号检测ocr验证
+credit_ocr:
+    url: https://kh_bd.253.com
+    apiName: OEM9584189
+    password: OEMpwd3520678
+
+# 支付宝配置
+alipay_appid: 2018072360758110
+alipay_payurl: https://openapi.alipay.com/gateway.do
+alipay_callbackurl: http://qingfeng2556.wicp.net:48665/open/agent/fund/rechargeCallBack
+alipay_publickey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArQ/qm+U7mHDLmzgFOrjgeDF8u2sNJDE2qr+DZeNs5zsl/1trwMBGZXyC4yM71kMeFPSLKQHUcdAZ+aWFLvV4Q4QGceskW0cfXAEOsnhIA6rkjgF1idtxabKPnyiXM4vyxFgTxXjO9dJRPAeJcVuFgfkUEKHtTcgURyIXx+MfB226HN7aa7sKckYSlEnV1s+3nFD4i2LJ1uvqPVqD/Hun7fhTSz8wfzhQ/tVoJg6giykGObMbSIzp9DjjYdtfiyiAP/T0zxOeVbMer0I7ADJ82GTr/U6/ABdvy3wiknGfaKA15nt+0uLcQLnM9XOAwLRXswtTkbez2sIBOudnCyCuBwIDAQAB
+alipay_privatekey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNmYv03a8wxYz6GtPCuowEREToimQ+uBAfvsThG/FaXEiPYXOHFx92gKEaGSbue5Kzg9CiZaofM/NXx2g5irOe6mD2xviY3a+8dDbW0QlcKPQnFA+OIwamTk/EefVuA08y/L+zMptrbUFEXxAnSCS87RVZHS7QetoOdifvmnNr4oqNjOf4M8GdRnUuxJVM+74nMzId0hy3Yp7sf3ypSJ5bXYGvwEfclNemoh7LDzaXVAtCvfwz/mEXJ38M+tSFIVtbzXzdqposqLM3s0KnGTjdqmOM0BelCVPXlnykmQqfD20S+TZWRRfg9H834tn2kd7Lm3Ipm0+5vHX5o4cRI6wFAgMBAAECggEAfArtmvV0WhJE/Hfx191ZeQdhIiDRzkup/FU+3UCAPrsm6UviS45LBqGJ/3XXMAVarx2i8BCFZk45N0U9HWNPFMCXbrdA4ZEaOMnJnIeEXpKVx4IAWnB+i8OAh0qbYONPRwg42r9TfVk5Wq64VOETJdm+4ND6yLFGQnLpazFvOSrtG7YuSOQr89XnOmx2r4zoX5BmtKZhZx3FUSgX8L0MUCA8pctQ39vRHMD0FQd2LInh3WFpHbTiUD62bvlMIw+rT631RGojJc62d9dhsDLU9sX33o4Wc/2W/nOsrcIZ00ITDBDmTmlWW8B311/htxpgMSFaPuq5A8PGbR1NP4o2BQKBgQDSbQRS+iW8juI4qcyy9/AfiTsxmIiGsx8hYQ6gbfBiaAdQWGJS9r+V1J1aEY1YjxS+AP0sg154kMEi0n2hsu5vUR2jb/26nLXYnLgvgBPqUWmvJbWnWRnkLk2pubtHpZXjkZMdHmlmlnHqukVYRD9gfvKBMErZhuEK9eS9r03NwwKBgQCsRH6jZjwNLj0pRuvwEOvjn6V45ct6iHzivUF9t85y0ZVf2EdwlTW5kh6pvQcM0kCH21qNtV59Nlmzz4IThW/RZtP7QNitPw/HWmRHpqety6Stw+tMGhm4vs4xu7nT6bZd0bvYScfhw+jArkqxOLIyesKHv1ZpEaff7XkwEiialwKBgQCcI0JjI7QentMjgnMelTT64YQnv+wGLyE5TmBhEFKfYluS9ZI3x1nPno0HiSCdhsW4WtmBTxUpVxfIc/G+qxubQ9A/NtlJwAB684cD0AB3DOPjj5Kj00yP8P+1odhiSG7ZBmrn32oMMjPjHUZZQYLZYjklPSU9FYUk8eJCEbMkqwKBgQCEgruXHVEcInFRiwh6Rcnt8iPq93ip7MuD7miuN/FKSQVKEKgDZgNJl6iWkJ0Xs7OHzae+UcE5N9GQixJXydDVlu+A2cTSnyuYAWQZ6YwaGAe40nfwtjMK9VrOzsSGycRKLsb7/OUQOQ6VCHzUDfSk9+EjYn8pmzcy/Qy3eYBaSQKBgHY1fMOjcBgvV9AMq26ksYTRCivfeLLg7aulIlYqZgwSlk9kWg4pEtmwMD+HEOft3153zffmt5hccpoGD0V+HSemEHa/bmIj9dZte3Sn35QnfaC4hIhVLfzVxx3rWHlpd85ESoqnr9JLDa5tr8mrMTIiTm+ulq30bpKkr1Tmxn/A
+
+ueditorConfigPath: editor/config-local.json

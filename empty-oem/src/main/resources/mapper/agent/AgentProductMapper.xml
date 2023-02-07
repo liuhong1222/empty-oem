@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AgentProductMapper">
+
+
+    <sql id="Base_Column_List">
+        id, agent_id, agent_name, product_group_id, name, icon, sort, state, apply_state, redirect_way,
+        external_links, content, description, remark, version, create_time, update_time, login_link
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cc.oem.modules.agent.entity.AgentProduct">
+        select
+
+        <include refid="Base_Column_List"/>
+        from product
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from product
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.AgentProduct">
+        insert into product (id, agent_id, agent_name, product_group_id, name, icon, sort, state, apply_state, redirect_way,
+        external_links, content, description, remark, version, create_time, update_time, login_link)
+        values (#{id}, #{agentId}, (select company_name from agent where id = #{agentId}), #{productGroupId}, #{name}, #{icon}, #{sort}, #{state}, #{applyState}, #{redirectWay},
+        #{externalLinks}, #{content}, #{description}, #{remark}, 0, now(), now(), #{loginLink})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.AgentProduct">
+        update product
+        <set>
+            <if test="productGroupId != null">
+                product_group_id = #{productGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="agentId != null">
+                agent_id = #{agentId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="applyState != null">
+                apply_state = #{applyState},
+            </if>
+            <if test="redirectWay != null">
+                redirect_way = #{redirectWay,jdbcType=VARCHAR},
+            </if>
+            <if test="externalLinks != null">
+                external_links = #{externalLinks},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="loginLink != null">
+                login_link = #{loginLink},
+            </if>
+            update_time = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AgentProduct">
+        update product
+        set createDate      = #{createdate,jdbcType=DATE},
+            product_type_id = #{productTypeId,jdbcType=BIGINT},
+            agent_id        = #{agentId,jdbcType=BIGINT},
+            product_name    = #{productName,jdbcType=VARCHAR},
+            product_desc    = #{productDesc,jdbcType=VARCHAR},
+            icon_path       = #{iconPath,jdbcType=VARCHAR},
+            jump_mode       = #{jumpMode,jdbcType=INTEGER},
+            link_url        = #{linkUrl,jdbcType=VARCHAR},
+            shelf_status    = #{shelfStatus,jdbcType=INTEGER},
+            order_num       = #{orderNum,jdbcType=INTEGER},
+            audit_status    = #{auditStatus,jdbcType=INTEGER},
+            remark          = #{remark,jdbcType=VARCHAR},
+            delete_status   = #{deleteStatus,jdbcType=INTEGER},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            update_time     = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectListByParam" parameterType="com.cc.oem.modules.agent.model.param.ProductLineListParam"
+            resultType="map">
+        SELECT
+        product.*, group1.name AS productLineName,
+        t3.company_name AS agentName,
+        case product.state
+        when 0 then '下架'
+        when 1 then '上架'
+        else '' end as shelfStatus,
+        case product.redirect_way
+        when 0 then '内部编辑'
+        when 1 then '外部地址'
+        else '' end as jumpMode,
+        case product.apply_state
+        when 0 then '初始化'
+        when 1 then '创建待审核'
+        when 3 then '已审核'
+        when 4 then '已驳回'
+        when 2 then '修改待审核'
+        when 5 then '已删除'
+        else '' end as state
+        FROM
+        product
+        INNER JOIN product_group group1 ON product.product_group_id = group1.id
+        INNER JOIN agent t3 ON product.agent_id = t3.id
+        <where>
+        </where>
+        <if test="agentId != null">
+            and product.agent_id=#{agentId}
+        </if>
+        <if test="state != null">
+            and product.state=#{state}
+        </if>
+        <if test="applyState != null">
+            and product.apply_state=#{applyState}
+        </if>
+        <if test="startTime != null and startTime!=''">
+            and product.update_time>=#{startTime}
+        </if>
+        <if test="endTime != null and endTime!=''">
+            and product.update_time &lt;= #{endTime}
+        </if>
+        <if test="productLineId != null and productLineId!=''">
+            and product.product_group_id = #{productLineId}
+        </if>
+        ORDER BY product.create_time desc
+    </select>
+
+
+    <select id="selectOneByMap" parameterType="map"
+            resultType="map">
+        select t1.*
+        from product t1
+        where 1=1
+        <if test="agentId != null">
+            and t1.agent_id=#{agentId}
+        </if>
+        <if test="productName != null">
+            and t1.name =#{productName}
+        </if>
+        and t1.state = 1
+        and ( t1.apply_state=1 or t1.apply_state=2 or t1.apply_state=3)
+        limit 1
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultType="map">
+        select t1.*,
+               t2.name AS productGroupName,
+               t3.company_name      AS agentName,
+               case t1.state
+                   when 0 then '上架'
+                   when 1 then '下架'
+                   else '' end      as state,
+               case t1.apply_state
+                   when 1 then '创建待审核'
+                   when 3 then '已审核'
+                   when 4 then '驳回'
+                   when 2 then '修改待审核'
+                   when 5 then '已删除'
+                   else '' end      as applyState,
+               case t1.redirect_way
+                   when 0 then '内部编辑'
+                   when 1 then '外部地址'
+                   else '' end      as redirectWay
+        FROM
+            product t1
+                INNER JOIN product_group t2 ON t1.product_group_id = t2.id
+                INNER JOIN agent t3 ON t1.agent_id = t3.id
+        where t1.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectOrderList" parameterType="java.lang.Long" resultType="java.util.LinkedHashMap">
+        select (@rownum := @rownum + 1) as orderNum,t1.id as id
+        from product t1,
+             (select @rownum := 0) t2
+        <where>
+            t1.product_group_id = #{productTypeId,jdbcType=BIGINT}
+        </where>
+        ORDER BY t1.sort asc,t1.update_time desc,id desc
+        limit 1000
+    </select>
+
+    <update id="updateOrderBatch" parameterType="java.util.List">
+        update product
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="sort =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.orderNum !=null">
+                        when id=#{item.id} then #{item.orderNum}
+                    </if>
+                    <if test="item.orderNum == null">
+                        when id=#{item.id} then sort
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+	<insert id="insertByDefault" parameterType="com.cc.oem.modules.agent.entity.AgentProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into product (id, createDate, product_type_id,
+                                  agent_id, product_name, product_desc,
+                                  icon_path, jump_mode, link_url,
+                                  shelf_status, order_num, audit_status,
+                                  remark, delete_status, create_time,
+                                  update_time, product_content)
+		SELECT null id,CURDATE() createDate, #{productTypeId} product_type_id,#{agentId} agent_id,
+		                                  product_name, product_desc,
+		                                  icon_path, jump_mode, link_url,
+		                                  shelf_status, order_num, audit_status,
+		                                  remark, delete_status, NOW(),
+		                                  NOW(), product_content
+		from product
+		where agent_id = 1 and product_name = '空号检测' and delete_status = 0
+    </insert>
+
+    <select id="listProductsOfAgent" resultType="java.util.Map">
+        select product.id ,product.name from product
+         <where>
+             apply_state = 3
+             <if test="agentId!=null">
+                 and product.agent_id =#{agentId}
+             </if>
+         </where>
+
+    </select>
+</mapper>

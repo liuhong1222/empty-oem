@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springboot.sample" level="INFO" />
+
+    <springProfile name="local">
+        <property name="BASE_DIR" value="D:/logs/oem-server" />
+    </springProfile>
+    <springProfile name="dev">
+        <property name="BASE_DIR" value="/test/log/oem-server" />
+    </springProfile>
+    <springProfile name="sit">
+        <property name="BASE_DIR" value="/test/log/oem-server" />
+    </springProfile>
+    <springProfile name="stable">
+        <property name="BASE_DIR" value="/test/log/oem-server" />
+    </springProfile>
+    <springProfile name="pre">
+        <property name="BASE_DIR" value="/test/log/oem-server" />
+    </springProfile>
+    <springProfile name="prod">
+        <property name="BASE_DIR" value="/test/log/oem-server" />
+    </springProfile>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%t] %5p %c{16}:%L - %m %n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${BASE_DIR}/app.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>30MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 本地、开发、sit环境 -->
+    <springProfile name="local,dev">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.springboot.sample" level="INFO" />
+        <logger name="com.cc.oem" level="DEBUG" />
+        <root level="info">
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </springProfile>
+
+    <!-- stable、预发、生产环境 -->
+    <springProfile name="sit,prod">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.springboot.sample" level="INFO" />
+        <logger name="com.cc.oem" level="INFO" />
+        <root level="ERROR">
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </springProfile>
+
+</configuration>

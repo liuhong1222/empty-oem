@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.CustInfoMapper">
+    <sql id="Base_Column_List">
+        cre_user_id, user_type, cust_id, cust_name, update_time
+    </sql>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.CustInfo">
+        update customer
+        <set>
+            <if test="customerType != null">
+                customer_type = #{customerType,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="agentId != null">
+                agent_id = #{agentId,jdbcType=VARCHAR},
+            </if>
+            update_time = now()
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectListCustParam" parameterType="com.cc.oem.modules.agent.model.param.CustInfoParam"
+            resultType="com.cc.oem.modules.agent.model.data.CustExportData">
+        SELECT cust.id AS customerId,cust.authentication_limit_level,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cust.customer_type = 0 THEN ext.id_card_name ELSE cust.name END as name
+        ,cust.phone,cust.email,
+        CASE WHEN  customer_type = 1 THEN '企业'
+        WHEN cust.customer_type = 0 THEN '个人' ELSE '其他' END customerType,
+        cust.create_time,ip,agent.company_name,
+        balance.realtime_count,balance.realtime_recharge_num,balance.realtime_recharge_money,
+        balance.empty_count,balance.empty_recharge_num,balance.empty_recharge_money,
+        balance.international_count,balance.international_recharge_num,balance.international_recharge_money,
+        balance.direct_common_count,balance.direct_common_recharge_num,balance.direct_common_recharge_money,
+        balance.line_direct_count,balance.line_direct_recharge_num,balance.line_direct_recharge_money,
+        api.state apiState,sett.official_web,if(t.id is null,0,1) canPresent
+        FROM customer cust
+        inner join customer_balance balance on balance.customer_id = cust.id
+        LEFT join agent on cust.agent_id = agent.id
+        left join agent_settings sett on agent.id = sett.agent_id
+        left join api_settings api on api.customer_id = cust.id
+        left join customer_ext ext on ext.customer_id = cust.id
+        left join customer_recharge t on t.customer_id = cust.id and t.pay_type=2 and t.recharge_number=5000
+        <where>
+            <if test="haveRecharged==1">
+                (balance.realtime_recharge_money>0 or balance.empty_recharge_money>0)
+            </if>
+            <if test="haveRecharged==0">
+                (balance.realtime_recharge_money=0 or balance.empty_recharge_money=0)
+            </if>
+            <if test="agentId!=null and agentId !=''">
+                and cust.agent_id=#{agentId}
+            </if>
+            <if test='customerType!=null and customerType!=-1 and customerType!=""'>
+                and cust.customer_type = #{customerType}
+            </if>
+            <if test="startTimeStr!=null and startTimeStr!=''">
+                and cust.create_time >= #{startTimeStr}
+            </if>
+            <if test="endTimeStr!=null and endTimeStr!=''">
+                and cust.create_time &lt;= #{endTimeStr}
+            </if>
+            <if test="phone!=null and phone!=''">
+                and cust.phone like concat('%',#{phone},'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and cust.id in(
+                    select id from customer where name like concat('%',#{name},'%')
+                    union all
+                    select customer_id from customer_ext where company_name like concat('%',#{name},'%')
+                    union all
+                    select customer_id from customer_ext where id_card_name like concat('%',#{name},'%')
+                )
+            </if>
+            <if test="ip!=null and ip!=''">
+                and cust.ip like concat('%',#{ip},'%')
+            </if>
+            <if test="email!=null and email!=''">
+                and cust.email like concat('%',#{email},'%')
+            </if>
+            <if test="(agentName!=null and agentName!='') or officialWeb!=null">
+                and cust.agent_id in (
+                    select agent_id from agent_settings
+                    <where>
+                        <if test="officialWeb!=null">
+                            official_web = #{officialWeb}
+                        </if>
+                    </where>
+                )
+            </if>
+        </where>
+        order by cust.create_time desc
+    </select>
+
+    <select id="countCustNumOfAgent" resultType="java.lang.Integer">
+        select count(1) from customer where agent_id = #{agentId}
+    </select>
+
+    <select id="queryAuditingCustExtList" resultType="com.cc.oem.modules.agent.model.data.userManage.CustomerExtQueryData">
+        select
+        e.id,
+        e.customer_id,
+        e.id_card_front_path,
+        e.id_card_back_path,
+        e.id_card_name,
+        e.id_card_number,
+        e.id_card_address,
+        e.id_card_expire_start_time,
+        e.id_card_expire_end_time,
+        e.email,
+        e.business_license_path,
+        e.company_name,
+        e.company_address,
+        e.business_license_number,
+        e.legal_person,
+        e.business_license_expire_start_time,
+        e.business_license_expire_end_time,
+        e.business_scope,
+        e.remark,
+        e.version,
+        e.create_time,
+        e.update_time
+        from customer c inner join customer_ext e on c.id = e.customer_id where c.agent_id = #{agentId} and state
+        <where>
+            <if test="agentId!=null and agentId!=''">
+                c.agent_id = #{agentId}
+            </if>
+            <if test="state!=null and state!=''">
+                and c.state =#{state}
+            </if>
+        </where>
+        order by e.state asc ,e.create_time desc
+    </select>
+
+    <update id="auditCustExtVerify">
+        update customer set state = #{state,jdbcType=INTEGER}
+        where id = #{customerId,jdbcType=BIGINT}
+    </update>
+
+    <select id="findUserIdMobileByMobileAndAgentId" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        t2.id,t2.phone,t2.name
+        FROM customer t2
+        <where>
+            phone like #{userPhone,jdbcType=VARCHAR}
+            and  t2.agent_id=#{agentId}
+        </where>
+    </select>
+
+    <select id="selectMobileListByCustIds" resultType="java.lang.String">
+        select phone from customer
+        <where>
+            <if test="list!=null and list.size()>0">
+                id in (
+                <foreach collection="list" item="item" separator=",">
+                    #{item}
+                </foreach>)
+            </if>
+        </where>
+        order by id limit 0,10
+    </select>
+
+    <select id="detailById" resultType="com.cc.oem.modules.agent.entity.CustDetailInfo">
+        select cust.*, ext.id_card_front_path, ext.id_card_back_path, ext.id_card_name, ext.id_card_number, ext.id_card_address, ext.id_card_expire_start_time, ext.id_card_expire_end_time, ext.email, ext.business_license_path, ext.company_name, ext.company_address, ext.business_license_number, ext.legal_person, ext.business_license_expire_start_time,
+         ext.business_license_expire_end_time,ext.business_scope from customer cust
+        left join customer_ext ext on cust.id = ext.customer_id
+        where cust.id = #{id}
+    </select>
+
+    <select id="selectCustIdListByAgentId" parameterType="map" resultType="java.lang.Long">
+        SELECT
+        t1.id
+        FROM
+        customer t1
+        where t1.agent_id=#{agentId}
+        <if test="start!=null">
+            <if test="pagesize!=null">
+                limit #{start,jdbcType=INTEGER},#{pagesize,jdbcType=INTEGER}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectById" resultType="com.cc.oem.modules.agent.entity.CustInfo">
+        select id, name, agent_id, phone, password, salt, email, unzip_password, customer_type, remark, state,
+        version, create_time, update_time, ip, area, operator, referer, authentication_limit_level from customer where id = #{custId}
+    </select>
+
+    <select id="countRealtimeCustNums" resultType="java.lang.Integer">
+       select count(1) from customer where agent_id = #{agentId} and real_level is not null
+    </select>
+
+    <select id="countIntervalAddCustNums" resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+        select agent_id,count(1) dailyAddCustNum,#{invokeDate} dayInt
+        from customer
+        where create_time <![CDATA[>=]]>#{startDate} and create_time <![CDATA[<]]>#{endDate}
+        group by agent_id
+    </select>
+
+    <select id="countIntervalAddCustNumsByTime" resultType="com.cc.oem.modules.job.entity.task.AgentDailyInfo">
+        select count(1) custNum,agent_id,#{invokeDate} dayInt
+        from customer
+        where create_time <![CDATA[<]]>#{endDate} 
+        group by agent_id
+    </select>
+
+    <update id="setApiStateByCustId">
+        update api_settings set state = #{state},update_time = now() where customer_id = #{custId}
+    </update>
+
+    <update id="updateCustAuthenLevel">
+        update customer set authentication_limit_level = #{level}
+        where id = #{custId}
+    </update>
+
+    <update id="updateCustAuthenLevelOfAgent">
+        update customer set authentication_limit_level = #{level}
+        where agent_id = #{agentId}
+    </update>
+
+    <select id="selectCustInfoListByAgentId" resultType="com.cc.oem.modules.agent.entity.CustInfo">
+        select id ,phone from customer where agent_id = #{agentId}
+    </select>
+
+    <select id="selectCustIdListByCustName" resultType="java.lang.Long">
+        select c.id 
+        from customer c
+        inner join agent_settings a on a.agent_id = c.agent_id 
+        		and a.official_web = (select official_web from agent_settings where agent_id = #{agentId} )
+        where c.name = #{customerName}
+        union
+        select customer_id from customer_ext where company_name like concat('%',#{customerName},'%')
+        union
+        select customer_id from customer_ext where id_card_name like concat('%',#{customerName},'%')
+    </select>
+
+    <select id="findByPhone" resultType="com.cc.oem.modules.agent.entity.CustInfo">
+        select id, name, agent_id, phone, password, salt, email, unzip_password, customer_type, remark, state, version,
+         create_time, update_time, ip, area, operator, referer, authentication_limit_level from customer
+         where phone = #{phone} and agent_id = #{agentId}
+    </select>
+
+    <insert id="saveCustOfAgent">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into customer (id, name, agent_id, phone, password, salt, email, unzip_password, remark, update_time,
+        ip, area, operator, referer, authentication_limit_level,customer_type)
+        values(#{id},#{name}, #{agentId}, #{phone}, #{password}, #{salt}, #{email}, #{unzipPassword}, #{remark}, now(),
+        #{ip}, #{area}, #{operator}, #{referer}, #{authenticationLimitLevel},#{customerType})
+    </insert>
+
+    <select id="queryByAgentIdAndName" resultType="com.cc.oem.modules.agent.entity.CustInfo">
+        select id from customer where agent_id = #{agentId} and name = #{name}
+    </select>
+</mapper>

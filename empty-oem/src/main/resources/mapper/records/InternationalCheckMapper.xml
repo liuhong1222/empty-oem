@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.records.InternationalCheckMapper">
+
+    <select id="getInternationalCheckPageList" resultType="com.cc.oem.modules.agent.model.data.records.InternationalCheckQueryVo">
+        select e.id, e.agent_id, e.agent_name, e.customer_id, e.file_name,e.file_size,e.illegal_number,e.total_number,e.active_count,e.no_register_count,
+		        e.unknown_count,e.create_time, e.update_time,CASE WHEN  customer_type = 1 THEN ext.company_name
+		        WHEN c.customer_type = 0 THEN ext.id_card_name ELSE c.name END as customerName ,c.phone,cy.name countryName
+        from international_check e
+        left join customer c on e.customer_id= c.id
+        left join customer_ext ext on ext.customer_id = e.customer_id
+        left join country cy on cy.code = e.country_code
+        <where>
+            e.status = 9 
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+        order by e.create_time desc
+    </select>
+
+    <select id="getInternationalTotal" resultType="com.cc.oem.modules.agent.model.data.records.InternationalCheckQueryVo">
+        select sum(e.total_number) total_number 
+        from international_check e
+        left join customer c on e.customer_id= c.id
+        <where>
+            e.status = 9 and file_url !='' and file_url is not null
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

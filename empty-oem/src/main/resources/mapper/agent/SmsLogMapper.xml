@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.SmsLogMapper">
+  <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.SmsLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sysUserId" />
+    <result column="agent_id" jdbcType="BIGINT" property="agentId" />
+    <result column="user_id" jdbcType="INTEGER" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="sms_type" jdbcType="INTEGER" property="smsType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sys_user_id, agent_id, user_id, mobile, message, sms_type, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from o_sms_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from o_sms_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.SmsLog">
+    insert into o_sms_log (id, sys_user_id, agent_id, 
+      user_id, mobile, message, 
+      sms_type, create_time)
+    values (#{id,jdbcType=BIGINT}, #{sysUserId,jdbcType=BIGINT}, #{agentId,jdbcType=BIGINT}, 
+      #{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR},
+      #{smsType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.SmsLog">
+    insert into o_sms_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sysUserId != null">
+        sys_user_id,
+      </if>
+      <if test="agentId != null">
+        agent_id,
+      </if>
+      <if test="id != null">
+        user_id,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="smsType != null">
+        sms_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sysUserId != null">
+        #{sysUserId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null">
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null">
+        #{smsType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.SmsLog">
+    update o_sms_log
+    <set>
+      <if test="sysUserId != null">
+        sys_user_id = #{sysUserId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="id != null">
+        user_id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null">
+        sms_type = #{smsType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.SmsLog">
+    update o_sms_log
+    set sys_user_id = #{sysUserId,jdbcType=BIGINT},
+      agent_id = #{agentId,jdbcType=BIGINT},
+      user_id = #{id,jdbcType=INTEGER},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      sms_type = #{smsType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectOneLatestVerifyCodeByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from o_sms_log
+    WHERE
+    sms_type = 1
+    AND mobile=#{mobile}
+    ORDER BY
+    create_time DESC
+    LIMIT 1
+  </select>
+
+</mapper>

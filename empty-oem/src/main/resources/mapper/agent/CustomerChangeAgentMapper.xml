@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.CustomerChangeAgentMapper">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, source_agent_id, dest_agent_id, customer_id, name, phone, remark, version, create_time, update_time
+    </sql>
+
+    <select id="getCustomerChangeAgentById"
+            resultType="com.cc.oem.modules.agent.model.data.records.CustomerChangeAgentQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_change_agent where id = #{id}
+    </select>
+
+    <select id="getCustomerChangeAgentPageList"
+            resultType="com.cc.oem.modules.agent.model.data.records.CustomerChangeAgentQueryVo">
+        select
+        r.id, r.source_agent_id, r.dest_agent_id, r.customer_id, r.name, r.phone, r.remark, r.version,
+        r.create_time, r.update_time, sa.company_name sourceCompanyName, sa.company_short_name sourceCompanyShortName,
+        da.company_name destCompanyName, da.company_short_name destCompanyShortName, e.id_card_name, e.company_name as
+        certified_company_name,customer.create_time registerTime
+        from customer_change_agent r
+        left join agent sa on r.source_agent_id = sa.id
+        left join agent da on r.dest_agent_id = da.id
+        left join customer_ext e on e.customer_id = r.customer_id
+        left join customer on customer.id = r.customer_id
+            <where>
+                <if test="startTime != null and startTime!=''">
+                    r.create_time >= #{startTime} and r.create_time &lt;= #{endTime}
+                </if>
+                <if test="sourceAgentName != null and sourceAgentName != ''">
+                    and (sa.company_name like concat('%', #{sourceAgentName}, '%') or sa.company_short_name like
+                    concat('%', #{sourceAgentName}, '%'))
+                </if>
+                <if test="destAgentName != null and destAgentName != ''">
+                    and (da.company_name like concat('%', #{destAgentName}, '%') or da.company_short_name like
+                    concat('%', #{destAgentName}, '%'))
+                </if>
+                <if test="name != null and name != ''">
+                    and (e.company_name like concat('%', #{name}, '%') or e.id_card_name like concat('%',
+                    #{name}, '%'))
+                </if>
+                <if test="phone != null and phone != ''">
+                    and r.phone like concat('%', #{phone}, '%')
+                </if>
+            </where>
+        order by r.create_time desc
+    </select>
+
+    <insert id="save">
+        insert into customer_change_agent (id, source_agent_id, dest_agent_id, customer_id, name, phone, remark,
+        version, create_time, update_time)
+        values(#{id}, #{sourceAgentId}, #{destAgentId}, #{customerId}, #{name}, #{phone}, #{remark},
+        0, now(), now())
+    </insert>
+
+    <update id="updateById">
+        update customer_change_agent set dest_agent_id = #{destAgentId},update_time = now() where id = #{id}
+    </update>
+
+</mapper>

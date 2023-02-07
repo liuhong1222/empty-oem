@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.finance.CustomerRefundMapper">
+
+    <sql id="Base_Column_List">
+       id, agent_id, customer_id, order_no, name, phone, price, refund_number, refund_amount, refund_type,
+        remark, version, create_time, update_time, creator_name, category, opening_balance, closing_balance
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.cc.oem.modules.agent.entity.finance.CustomerRefund">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_refund
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from trd_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+    insert into trd_order (id, cre_user_id, order_no, 
+      trade_no, cl_order_no, products_id, 
+      number, money, pay_type, 
+      pay_time, type, status, 
+      delete_status, version, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{creUserId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, 
+      #{tradeNo,jdbcType=VARCHAR}, #{clOrderNo,jdbcType=VARCHAR}, #{productsId,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{deleteStatus,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+        insert into trd_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="creUserId != null">
+                cre_user_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="tradeNo != null">
+                trade_no,
+            </if>
+            <if test="clOrderNo != null">
+                cl_order_no,
+            </if>
+            <if test="productsId != null">
+                products_id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="payType != null">
+                pay_type,
+            </if>
+            <if test="payTime != null">
+                pay_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="deleteStatus != null">
+                delete_status,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="creUserId != null">
+                #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clOrderNo != null">
+                #{clOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productsId != null">
+                #{productsId,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteStatus != null">
+                #{deleteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+        update trd_order
+        <set>
+            <if test="creUserId != null">
+                cre_user_id = #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                trade_no = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clOrderNo != null">
+                cl_order_no = #{clOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productsId != null">
+                products_id = #{productsId,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                pay_type = #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.finance.CustomerRecharge">
+    update trd_order
+    set cre_user_id = #{creUserId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR},
+      cl_order_no = #{clOrderNo,jdbcType=VARCHAR},
+      products_id = #{productsId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      delete_status = #{deleteStatus,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryCustRefundList" resultType="com.cc.oem.modules.agent.model.data.finance.QueryCustRefundData">
+        select refund.id, refund.agent_id, refund.customer_id, refund.order_no,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as name,
+        refund.phone, refund.price, refund.refund_number,
+        refund.refund_amount, refund.refund_type, refund.remark, refund.create_time, refund.update_time, refund.category, refund.opening_balance, refund.closing_balance,
+        agent.company_name
+        from customer_refund refund
+        inner join agent on agent.id = refund.agent_id
+        inner join customer cu on cu.id = refund.customer_id
+        left join customer_ext ext on ext.customer_id = refund.customer_id
+        <where>
+        	<if test="category != null">
+                 refund.category= #{category}
+            </if>
+            <if test="startTime != null  and startTime!=''">
+                and <![CDATA[refund.create_time >= #{startTime} and refund.create_time <=#{endTime}]]>
+            </if>
+            <if test="custMobile != null and custMobile!=''">
+                and cu.phone like concat('%',#{custMobile},'%')
+            </if>
+            <if test="custIdList != null">
+                and refund.customer_id in(
+                <foreach collection="custIdList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="companyName != null  and companyName!=''">
+                and agent.company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="agentId!=null">
+                and refund.agent_id = #{agentId}
+            </if>
+        </where>
+        order by refund.create_time desc
+    </select>
+
+    <insert id="save">
+        insert into customer_refund(id, agent_id, customer_id, order_no, name, phone,creator_name, price, refund_number, refund_amount, refund_type, remark, version, create_time,
+         update_time, category, opening_balance, closing_balance)
+         values(
+         #{id}, #{agentId}, #{customerId}, #{orderNo},(select name from customer where id=#{customerId}),(select phone from customer where id=#{customerId}),#{creatorName}, #{price}, #{refundNumber}, #{refundAmount}, #{refundType}, #{remark}, #{version}, now(),
+         now(),#{category}, #{openingBalance}, #{closingBalance}
+         )
+    </insert>
+
+    <select id="queryTotalRechargeInfo" resultType="com.cc.oem.modules.agent.entity.finance.CustomerRefund">
+        select sum(refund_number) refund_number,sum(refund_amount) refund_amount
+        from customer_refund refund
+        inner join agent on agent.id = refund.agent_id
+        inner join customer cu on cu.id = refund.customer_id
+        left join customer_ext ext on ext.customer_id = refund.customer_id
+        <where>
+            <if test="startTime != null  and startTime!=''">
+                <![CDATA[refund.create_time >= #{startTime} and refund.create_time <=#{endTime}]]>
+            </if>
+            <if test="custMobile != null and custMobile!=''">
+                and cu.phone like concat('%',#{custMobile},'%')
+            </if>
+            <if test="custIdList != null">
+                and refund.customer_id in(
+                <foreach collection="custIdList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="companyName != null  and companyName!=''">
+                and agent.company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="agentId!=null">
+                and refund.agent_id = #{agentId}
+            </if>
+        </where>
+    </select>
+
+    <select id="countTotalRefundOfCust" resultType="com.cc.oem.modules.agent.entity.AgentAccount">
+        select sum(case category when 0 then refund_number else 0 end) emptyRechargeNumber, agent_id,
+        sum(case category when 1 then refund_number else 0 end) realtimeRechargeNumber
+        from customer_refund re
+        group by agent_id
+    </select>
+</mapper>

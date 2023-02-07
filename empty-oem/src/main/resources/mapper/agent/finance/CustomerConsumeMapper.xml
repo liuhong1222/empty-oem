@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.finance.CustomerConsumeMapper">
+
+    <select id="queryCustConsumeList" resultType="com.cc.oem.modules.agent.model.data.finance.QueryCustConsumeData">
+        select consume.*,agent.company_name
+        from customer_consume consume
+        inner join agent on agent.id = consume.agent_id
+        <where>
+            <if test="companyName!=null and companyName!=''">
+                agent.company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="userName!=null and userName!=''">
+                and consume.name like concat('%',#{userName},'%')
+            </if>
+            <if test="custMobile!=null and custMobile!=''">
+               and  consume.phone like concat('%',#{custMobile},'%')
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="countIntervalDailyReport" resultType="com.cc.oem.modules.job.entity.task.CustDailyRechargeConsumeInfo">
+        select customer_id,agent_id,sum(ifnull(consume_number,0)) totalNum,category,#{invokeDate} dayInt
+        from customer_consume
+        where consume_type=1 and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by agent_id, category
+    </select>
+
+    <!-- 查找空号统计数据-->
+ <select id="findDetailConsumeDataOfCsv" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select agent_id,customer_id,sum(ifnull(real_number,0)) real_number,DATE_FORMAT(update_time,'%Y%m%d') dayInt,1 staticType,
+		        sum(ifnull(silent_number,0)) silent_number,sum(ifnull(empty_number,0)) empty_number,
+		        sum(ifnull(risk_number,0)) risk_number,sum(ifnull(total_number,0)) total_number
+        from empty_check
+        where status = 9
+        and (file_url != '' and file_url is not null) 
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d')
+    </select>
+
+    <!-- 查找API空号统计数据-->
+    <select id="findDetailConsumeDataOfEmptyCheck" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select agent_id,customer_id,sum(ifnull(real_number,0)) real_number,DATE_FORMAT(update_time,'%Y%m%d') dayInt,2 staticType,
+		        sum(ifnull(silent_number,0)) silent_number,sum(ifnull(empty_number,0)) empty_number,
+		        sum(ifnull(risk_number,0)) risk_number,sum(ifnull(total_number,0)) total_number
+        from empty_check
+        where status = 9
+        and (file_url = '' or file_url is null) 
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d')
+    </select>
+
+    <select id="findDetailConsumeDataOfrealTimeCsv" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d') dayInt,3 staticType,
+		       sum(ifnull(normal,0)) normal_number,sum(ifnull(empty,0)) realtime_empty_number,
+		        sum(ifnull(on_call,0)) oncall_number,sum(ifnull(total_number,0)) total_number,
+		        sum(ifnull(online_but_not_available,0)) not_online_number,sum(ifnull(shutdown,0)) shutdown_number,
+		        sum(ifnull(suspected_shutdown,0)) like_shutdown_number,sum(ifnull(service_suspended,0)) tingji_number,
+		        sum(ifnull(number_portability,0)) mnp_number,sum(ifnull(exception_fail_count,0)) moberr_number,
+		        sum(ifnull(unknown,0)) unknown_number
+        from realtime_check
+        where
+        status = 9
+            and (file_url != '' and file_url is not null)
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d')
+    </select>
+
+    <!-- 查找API实时统计数据-->
+    <select id="findDetailConsumeDataOfRealtimeCheck" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d') dayInt,4 staticType,
+		       sum(ifnull(normal,0)) normal_number,sum(ifnull(empty,0)) realtime_empty_number,
+		        sum(ifnull(on_call,0)) oncall_number,sum(ifnull(total_number,0)) total_number,
+		        sum(ifnull(online_but_not_available,0)) not_online_number,sum(ifnull(shutdown,0)) shutdown_number,
+		        sum(ifnull(suspected_shutdown,0)) like_shutdown_number,sum(ifnull(service_suspended,0)) tingji_number,
+		        sum(ifnull(number_portability,0)) mnp_number,sum(ifnull(exception_fail_count,0)) moberr_number,
+		        sum(ifnull(unknown,0)) unknown_number
+        from realtime_check
+        where
+        status = 9
+            and (file_url = '' or file_url is null)
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d')
+    </select>
+    
+    <select id="findDetailConsumeDataOfInternationalCheck" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d') dayInt,1 staticType,
+		       sum(ifnull(active_count,0)) activeNumber,sum(ifnull(no_register_count,0)) noRegisterNumber,
+		       sum(ifnull(unknown_count,0)) interUnknownNumber,sum(ifnull(total_number,0)) total_number
+        from international_check
+        where
+        status = 9
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d')
+    </select>
+    
+    <select id="findDetailConsumeDataOfIntDirectCheck" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        select customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d') dayInt,1 staticType,product_type,
+		       sum(ifnull(active_count,0)) activeNumber,sum(ifnull(no_register_count,0)) noRegisterNumber,
+		       sum(ifnull(total_number,0)) total_number
+        from int_direct_check
+        where status = 9
+        and update_time <![CDATA[>=]]>#{startDate} and update_time <![CDATA[<]]>#{endDate}
+        group by customer_id,agent_id,DATE_FORMAT(update_time,'%Y%m%d'),product_type
+    </select>
+
+    <select id="queryTotalRechargeInfo" resultType="java.lang.Long">
+        select sum(consume_number) consume_number from customer_consume
+        <where>
+            <if test="agentId!=null">
+                agent_id = #{agentId}
+            </if>
+        </where>
+    </select>
+</mapper>

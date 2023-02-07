@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.ProductFaqMapper">
+
+
+  <sql id="Base_Column_List">
+    id, createDate, agent_id, product_id, question, shelf_status, order_num, audit_status,
+    remark, delete_status, create_time, update_time
+  </sql>
+
+  <sql id="Blob_Column_List">
+    answer
+  </sql>
+
+  <update id="deleteById" parameterType="string">
+    update faq
+    set apply_state = 5,update_time = now()
+    where id = #{id}
+  </update>
+
+  <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.ProductFaq">
+    insert into product_faq (id, createDate, agent_id,
+                             product_id, question, shelf_status,
+                             order_num, audit_status, remark,
+                             delete_status, create_time, update_time,
+                             answer)
+    values (#{id}, #{createdate}, #{agentId},
+            #{productId}, #{question}, #{shelfStatus},
+            #{order}, #{auditStatus}, #{remark},
+            #{deleteStatus}, #{createTime}, #{updateTime},
+            #{answer})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.ProductFaq">
+    insert into faq
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id
+      </if>
+      <if test="agentId != null">
+        ,agent_id
+      </if>
+      <if test="productId != null">
+        ,product_id
+      </if>
+      <if test="title != null">
+        ,title
+      </if>
+      <if test="state != null">
+        ,state
+      </if>
+      <if test="sort != null">
+        ,sort
+      </if>
+      <if test="applyState != null">
+        ,apply_state
+      </if>
+      <if test="content != null">
+        ,content
+      </if>
+      ,create_time,update_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id}
+      </if>
+      <if test="agentId != null">
+        ,#{agentId}
+      </if>
+      <if test="productId != null">
+        ,#{productId}
+      </if>
+      <if test="title != null">
+        ,#{title}
+      </if>
+      <if test="state != null">
+        ,#{state}
+      </if>
+      <if test="sort != null">
+        ,#{sort}
+      </if>
+      <if test="applyState != null">
+        ,#{applyState}
+      </if>
+      <if test="content != null">
+        ,#{content}
+      </if>
+      ,now(),now()
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.ProductFaq">
+    update faq
+    <set>
+      update_time=now()
+      <if test="agentId != null">
+        ,agent_id = #{agentId}
+      </if>
+      <if test="productId != null">
+        ,product_id=#{productId}
+      </if>
+      <if test="title != null">
+        ,title=#{title}
+      </if>
+      <if test="state != null">
+        ,state=#{state}
+      </if>
+      <if test="sort != null">
+        ,sort=#{sort}
+      </if>
+      <if test="applyState != null">
+        ,apply_state=#{applyState}
+      </if>
+      <if test="content != null">
+        ,content=#{content}
+      </if>
+      <if test="remark != null">
+        ,remark=#{remark}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+<!--  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cc.oem.modules.agent.entity.ProductFaq">-->
+<!--    update product_faq-->
+<!--    set createDate = #{createdate},-->
+<!--        agent_id = #{agentId},-->
+<!--        product_id = #{productId},-->
+<!--        question = #{question},-->
+<!--        shelf_status = #{shelfStatus},-->
+<!--        order_num = #{order},-->
+<!--        audit_status = #{auditStatus},-->
+<!--        remark = #{remark},-->
+<!--        delete_status = #{deleteStatus},-->
+<!--        create_time = #{createTime},-->
+<!--        update_time = #{updateTime},-->
+<!--        answer = #{answer}-->
+<!--    where id = #{id}-->
+<!--  </update>-->
+
+  <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.ProductFaq">
+    update product_faq
+    set createDate = #{createdate},
+        agent_id = #{agentId},
+        product_id = #{productId},
+        question = #{question},
+        shelf_status = #{shelfStatus},
+        order_num = #{order},
+        audit_status = #{auditStatus},
+        remark = #{remark},
+        delete_status = #{deleteStatus},
+        create_time = #{createTime},
+        update_time = #{updateTime}
+    where id = #{id}
+  </update>
+
+  <select id="productFaqAllList" parameterType="com.cc.oem.modules.agent.model.param.ProductFaqParam"
+          resultType="com.cc.oem.modules.agent.model.data.FaqInfoData">
+    SELECT pf.id,ag.company_name agentName,product.name productName,pf.title,pf.content,
+    if(pf.state = 0,'下架','上架') state,pf.create_time createTime,
+    pf.update_time updateTime,pf.sort sort,
+    case when pf.apply_state = 0 then '初始化'
+    when pf.apply_state = 2 then '修改待审核'
+    when pf.apply_state = 1 then '创建待审核'
+    when pf.apply_state = 3 then '已审核'
+    when pf.apply_state = 4 then '已驳回'
+    when pf.apply_state = 5 then '已删除'  else '未知' end applyState,pf.remark
+    from faq pf
+    INNER JOIN agent ag on ag.id = pf.agent_id
+    <if test="agentId != null and agentId != ''">
+      and pf.agent_id = #{agentId}
+    </if>
+    INNER JOIN product on product.id = pf.product_id
+    <where>
+      <if test="productId != null and productId != ''">
+        and product.id = #{productId}
+      </if>
+    </where>
+    <if test="startTime != null and startTime != ''">
+      and pf.create_time >= #{startTime}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and pf.create_time &lt;= #{endTime}
+    </if>
+    <if test="state != null and state != ''">
+      and pf.state = #{state}
+    </if>
+    <if test="applyState!= null and applyState != ''">
+      and pf.apply_state = #{applyState}
+    </if>
+    <if test="queryType != null and queryType != ''">
+      <if test="queryType == 'title'">
+        <if test="content != '' and content != null">
+          and pf.title like '%${content}%'
+        </if>
+      </if>
+      <if test="queryType == 'content'">
+        <if test="content != '' and content != null">
+          and pf.content like '%${content}%'
+        </if>
+      </if>
+    </if>
+    <if test="queryType == '' or queryType == null">
+      <if test="content != '' and content != null">
+        and (pf.content like '%${content}%' or pf.title like '%${content}%' )
+      </if>
+    </if>
+    order by pf.create_time desc
+  </select>
+
+  <select id="getProductFaqInfoById" resultType="com.cc.oem.modules.agent.model.data.FaqInfoData"
+          parameterType="com.cc.oem.modules.agent.model.param.FaqDetailParam">
+    SELECT pf.id,oa.company_name agentName,pi.name productName,pf.title,pf.content,
+    if(pf.state = 0,'下架','上架') state,pf.create_time createTime,
+    pf.update_time updateTime,pf.`sort`,
+    case when pf.apply_state = 1 then '创建待审核'
+    when pf.apply_state = 2 then '修改待审核'
+    when pf.apply_state = 3 then '已审核'
+    when pf.apply_state = 4 then '驳回'
+    when pf.apply_state = 5 then '已删除'  else '未知' end applyState,pf.remark
+    from faq pf
+    left JOIN agent oa on oa.id = pf.agent_id
+    <if test="agentId != null and agentId != ''">
+      and pf.agent_id = #{agentId}
+    </if>
+    left JOIN product pi on pi.id = pf.product_id
+    where pf.apply_state != 5 and pf.id = #{productFaqId}
+  </select>
+
+  <select id="getProductInfo" resultType="com.cc.oem.modules.agent.model.data.ProductInfoWithOrders" parameterType="HashMap">
+    select p.id productId, p.product_name productName,ifnull((select count(1) from product_faq
+    where product_id = p.id and delete_status = 0
+    and audit_status = 1 and shelf_status = 0,0))+1 orders
+    from product_info p
+    where p.delete_status = 0 and p.audit_status = 1
+    <if test="agentId != null and agentId != ''">
+      and p.agent_id = #{agentId}
+    </if>
+    <if test="productName != null and productName != ''">
+      and p.product_name like '%${productName}%' 
+    </if>
+  </select>
+
+  <select id="getFaqInfoWithUpdate" parameterType="com.cc.oem.modules.agent.model.param.FaqDetailParam"
+          resultType="com.cc.oem.modules.agent.model.data.FaqInfoWithUpdateData">
+    SELECT pf.id,product_id,pi.name productName,pf.title,pf.content,
+           pf.state state,pf.`sort` sort,
+           ifnull((SELECT count(1) from faq where product_id = pf.product_id
+                                                      and state = 0 and pf.apply_state = 2),0) orders
+    from faq pf
+    inner JOIN product pi on pi.id = pf.product_id and pi.apply_state != 5
+    where pf.apply_state != 5 and pf.id = #{productFaqId} and pf.agent_id = #{agentId}
+  </select>
+
+  <insert id="insertProductFaqWebsiteByFaqId" parameterType="string">
+    replace into product_faq_website
+    select *
+    from product_faq
+    where id = #{productFaqId} and delete_status = 0 and audit_status = 1
+  </insert>
+
+  <select id="IsExistFaqInfoByFaq" parameterType="com.cc.oem.modules.agent.model.param.IsExistFaqParam" resultType="Integer">
+    select count(1)
+    from faq
+    where apply_state != 5 and apply_state in (0,1,2,3) and agent_id = #{agentId}
+    and (title = #{question} or content = #{answer})
+    <if test="productFaqId != null and productFaqId != ''">
+      and id != #{productFaqId}
+    </if>
+  </select>
+  
+  <insert id="insertByDefault" parameterType="com.cc.oem.modules.agent.entity.TempEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into product_faq (id, createDate, agent_id,
+                             product_id, question, shelf_status,
+                             order_num, audit_status, remark,
+                             delete_status, create_time, update_time,
+                             answer)
+    SELECT null id, CURDATE() createDate, #{agentId},
+			 #{objectId}, question, shelf_status,
+			 order_num, audit_status, remark,
+			 delete_status, NOW() create_time, NOW() update_time,
+			 answer
+	from product_faq 
+	where agent_id = 1 and product_id = 86 and  delete_status = 0;
+  </insert>
+  
+  <insert id="insertWebByDefault" parameterType="com.cc.oem.modules.agent.entity.TempEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into product_faq_website (id, createDate, agent_id,
+                             product_id, question, shelf_status,
+                             order_num, audit_status, remark,
+                             delete_status, create_time, update_time,
+                             answer)
+    SELECT null id, CURDATE() createDate, #{agentId},
+			 #{objectId}, question, shelf_status,
+			 order_num, audit_status, remark,
+			 delete_status, NOW() create_time, NOW() update_time,
+			 answer
+	from product_faq_website 
+	where agent_id = 1 and product_id = 86 and  delete_status = 0;
+  </insert>
+
+  <select id="selectByPrimaryKey" resultType="com.cc.oem.modules.agent.entity.ProductFaq">
+    select * from faq where id = #{id}
+  </select>
+
+  <select id="getProductFaqByAgentId" resultType="com.cc.oem.modules.agent.entity.ProductFaq">
+   select id,product_id ,sort from faq where agent_id =#{agentId}
+    order by product_id,'sort' asc
+  </select>
+</mapper>

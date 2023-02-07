@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cc.oem.modules.job.dao.CustDailyInfoMapper">
+
+	<select id="findEmptyListByDailyTask" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+		select id, day_int, empty_total, create_time, update_time, agent_id, customer_id, real_number, silent_number, empty_number, risk_number, staticType
+	        from oem_cust_daily_empty_info
+            where day_int >= #{startDate} and day_int <![CDATA[<=]]> #{endDate}
+	</select>
+
+	<select id="findRealtimeListByDailyTask" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+		select id, day_int, realtime_total, create_time, update_time, agent_id, customer_id, normal_number, realtime_empty_number, oncall_number, not_online_number,
+		 shutdown_number, like_shutdown_number, tingji_number, mnp_number, moberr_number, unknown_number, staticType
+	        from oem_cust_daily_realtime_info
+            where day_int >= #{startDate} and day_int <![CDATA[<=]]> #{endDate}
+	</select>
+	
+	<select id="findInternationalListByDailyTask" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+		select id, day_int, international_total, create_time, update_time, agent_id, customer_id, active_number, no_register_number, staticType,inter_unknown_number
+	        from oem_cust_daily_international_info
+            where day_int >= #{startDate} and day_int <![CDATA[<=]]> #{endDate}
+	</select>
+	
+	<select id="findIntDirectListByDailyTask" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+		select id, day_int, direct_total, create_time, update_time, agent_id, customer_id, active_number, no_register_number, staticType,product_type
+	        from oem_cust_daily_direct_info
+            where day_int >= #{startDate} and day_int <![CDATA[<=]]> #{endDate}
+	</select>
+
+    <insert id="batchSaveEmptyConsume">
+        insert into oem_cust_daily_empty_info(day_int, empty_total, agent_id, customer_id, real_number,
+        silent_number, empty_number, risk_number, staticType ,create_time, update_time)
+		 values
+		 <foreach collection="list" item="item" separator=",">
+             ( #{item.dayInt},#{item.emptyTotal},#{item.agentId}, #{item.customerId}, #{item.realNumber}, #{item.silentNumber}, #{item.emptyNumber},
+             #{item.riskNumber}, #{item.staticType},now(),now())
+         </foreach>
+    </insert>
+
+    <insert id="batchSaveRealtimeConsume">
+        insert into oem_cust_daily_realtime_info(agent_id,customer_id, day_int, realtime_total,normal_number, realtime_empty_number, oncall_number, not_online_number,
+        shutdown_number, like_shutdown_number, tingji_number, mnp_number, moberr_number, unknown_number, staticType,create_time,update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.agentId},#{item.customerId}, #{item.dayInt},  #{item.realtimeTotal},  #{item.normalNumber}, #{item.realtimeEmptyNumber}, #{item.oncallNumber}, #{item.notOnlineNumber},
+            #{item.shutdownNumber}, #{item.likeShutdownNumber}, #{item.tingjiNumber}, #{item.mnpNumber}, #{item.moberrNumber}, #{item.unknownNumber}, #{item.staticType},now(),now())
+        </foreach>
+    </insert>
+    
+    <insert id="batchSaveInternationalConsume">
+        insert into oem_cust_daily_international_info(agent_id,customer_id, day_int, international_total,active_number, no_register_number
+        		,inter_unknown_number, staticType,create_time,update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.agentId},#{item.customerId}, #{item.dayInt},  #{item.internationalTotal},  #{item.activeNumber}, #{item.noRegisterNumber}
+            , #{item.interUnknownNumber}, #{item.staticType},now(),now())
+        </foreach>
+    </insert>
+    
+    <insert id="batchSaveIntDirectConsume">
+        insert into oem_cust_daily_direct_info(agent_id,customer_id, day_int, product_type,direct_total,active_number, no_register_number
+        		,staticType,create_time,update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.agentId},#{item.customerId}, #{item.dayInt},#{item.productType},  #{item.directTotal},  #{item.activeNumber}, #{item.noRegisterNumber}
+            , #{item.staticType},now(),now())
+        </foreach>
+    </insert>
+
+    <update id="updateEmptyConsume">
+        update oem_cust_daily_empty_info
+        <set>
+            <if test="realNumber!=null">
+                real_number = #{realNumber},
+            </if>
+            <if test="emptyTotal!=null">
+                empty_total = #{emptyTotal},
+            </if>
+            <if test="silentNumber!=null">
+                silent_number = #{silentNumber},
+            </if>
+            <if test="emptyNumber!=null">
+                empty_number = #{emptyNumber},
+            </if>
+            <if test="riskNumber!=null">
+                risk_number = #{riskNumber},
+            </if>
+             update_time = now()
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateRealtimeConsume">
+        update oem_cust_daily_realtime_info
+        <set>
+            <if test="normalNumber!=null">
+                normal_number = #{normalNumber},
+            </if>
+            <if test="realtimeEmptyNumber!=null">
+                realtime_empty_number = #{realtimeEmptyNumber},
+            </if>
+            <if test="oncallNumber!=null">
+                oncall_number = #{oncallNumber},
+            </if>
+            <if test="realtimeTotal!=null">
+                realtime_total = #{realtimeTotal},
+            </if>
+            <if test="notOnlineNumber!=null">
+                not_online_number = #{notOnlineNumber},
+            </if>
+            <if test="shutdownNumber!=null">
+                shutdown_number = #{shutdownNumber},
+            </if>
+            <if test="likeShutdownNumber!=null">
+                like_shutdown_number = #{likeShutdownNumber},
+            </if>
+            <if test="tingjiNumber!=null">
+                tingji_number = #{tingjiNumber},
+            </if>
+            <if test="mnpNumber!=null">
+                mnp_number = #{mnpNumber},
+            </if>
+            <if test="moberrNumber!=null">
+                moberr_number = #{moberrNumber},
+            </if>
+            <if test="unknownNumber!=null">
+                unknown_number = #{unknownNumber},
+            </if>
+            update_time = now()
+        </set>
+        where id=#{id}
+    </update>
+    
+    <update id="updateInternationalConsume">
+        update oem_cust_daily_international_info
+        <set>
+            <if test="internationalTotal!=null">
+                international_total = #{internationalTotal},
+            </if>
+            <if test="activeNumber!=null">
+                active_number = #{activeNumber},
+            </if>
+            <if test="noRegisterNumber!=null">
+                no_register_number = #{noRegisterNumber},
+            </if>
+            <if test="interUnknownNumber!=null">
+                inter_unknown_number = #{interUnknownNumber},
+            </if>
+             update_time = now()
+        </set>
+        where id=#{id}
+    </update>
+    
+    <update id="updateIntDirectConsume">
+        update oem_cust_daily_direct_info
+        <set>
+            <if test="directTotal!=null">
+                direct_total = #{directTotal},
+            </if>
+            <if test="activeNumber!=null">
+                active_number = #{activeNumber},
+            </if>
+            <if test="noRegisterNumber!=null">
+                no_register_number = #{noRegisterNumber},
+            </if>
+             update_time = now()
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="findEmptyDataByCustAndDay" resultType="com.cc.oem.modules.job.entity.task.CustEmptyInfo">
+        select info.id, info.day_int, info.agent_id, info.customer_id, sum(empty_total) empty_total ,sum(real_number)real_number, sum(silent_number) silent_number,
+        sum(empty_number) empty_number, sum(risk_number) risk_number,ag.company_name companyName,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as customerName,cu.phone
+        from oem_cust_daily_empty_info info
+        inner join customer cu on cu.id = info.customer_id
+        left join customer_ext ext on ext.customer_id = cu.id
+        left join agent ag on ag.id = info.agent_id
+        where day_int >=#{startTime} and day_int <![CDATA[<=]]>#{endTime}
+        <if test="agentId!=null">
+            and info.agent_id = #{agentId}
+        </if>
+        <if test="phone!=null">
+            and cu.phone like concat('%',#{phone},'%')
+        </if>
+        group by day_int,info.customer_id
+    </select>
+
+    <select id="findRealtimeDataByCustAndDay" resultType="com.cc.oem.modules.job.entity.task.CustRealtimeInfo">
+        select info.id, info.day_int, info.agent_id, info.customer_id, sum(realtime_total) realtime_total, sum(normal_number) normal_number, sum(realtime_empty_number) realtime_empty_number, sum(oncall_number) oncall_number,
+        sum(not_online_number) not_online_number, sum(shutdown_number) shutdown_number, sum(like_shutdown_number) like_shutdown_number, sum(tingji_number) tingji_number, sum(mnp_number) mnp_number, sum(moberr_number) moberr_number,
+        sum(unknown_number) unknown_number,ag.company_name companyName,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as customerName,cu.phone
+        from oem_cust_daily_realtime_info info
+        inner join customer cu on cu.id = info.customer_id
+        left join customer_ext ext on ext.customer_id = cu.id
+        left join agent ag on ag.id = info.agent_id
+        where day_int >=#{startTime} and day_int <![CDATA[<=]]>#{endTime}
+         <if test="agentId!=null">
+             and info.agent_id = #{agentId}
+         </if>
+        <if test="phone!=null">
+            and cu.phone like concat('%',#{phone},'%')
+        </if>
+        group by day_int,info.customer_id
+    </select>
+    
+    <select id="findByCustAndDay" resultType="com.cc.oem.modules.agent.model.data.records.CustDailyPageData">
+        SELECT  a.day_int,a.agent_id, a.customer_id, ag.company_name companyName,
+		       CASE WHEN  cu.customer_type = 1 THEN ext.company_name
+		            WHEN cu.customer_type = 0 THEN ext.id_card_name 
+					ELSE cu.name END as customerName,cu.phone ,
+				sum(ifnull(empty_total,0)) empty_total ,
+				sum(ifnull(realtime_total,0)) realtime_total, 
+				sum(ifnull(international_total,0)) international_total,
+				sum(ifnull(directCommonTotal,0)) directCommonTotal,
+				sum(ifnull(lineDirectTotal,0)) lineDirectTotal
+		<![CDATA[
+		from (
+			SELECT day_int,agent_id,customer_id,ifnull(empty_total,0) empty_total,0 realtime_total,0 international_total,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_empty_info 
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,ifnull(realtime_total,0) realtime_total,0 international_total,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_realtime_info 
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,0 realtime_total,ifnull(international_total,0) international_total ,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_international_info  
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,0 realtime_total,0 international_total ,if(product_type != 'line',ifnull(direct_total,0),0) directCommonTotal,
+						if(product_type = 'line',ifnull(direct_total,0),0) lineDirectTotal
+			from oem_cust_daily_direct_info  
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+		) a  ]]>
+		INNER JOIN customer cu on cu.id = a.customer_id
+		<if test="phone != null and phone != ''">
+		        and cu.phone = #{phone}
+		</if>
+		inner join agent ag on ag.id = a.agent_id
+		<if test="agentId != null">
+		        and ag.id = #{agentId}
+		</if>
+		left join customer_ext ext on ext.customer_id = a.customer_id
+		GROUP BY a.day_int,agent_id,customer_id
+        order by a.day_int,(a.empty_total+a.realtime_total+a.international_total+a.directCommonTotal+a.lineDirectTotal) desc
+    </select>
+
+    <select id="countEachConsumeTotal" resultType="com.cc.oem.modules.job.entity.task.CustDailyInfo">
+        SELECT sum(ifnull(empty_total,0)) empty_total ,
+				sum(ifnull(realtime_total,0)) realtime_total,
+				sum(ifnull(international_total,0)) international_total ,
+				sum(ifnull(directCommonTotal,0)) directCommonTotal,
+				sum(ifnull(lineDirectTotal,0)) lineDirectTotal
+		<![CDATA[
+		from (
+			SELECT day_int,agent_id,customer_id,ifnull(empty_total,0) empty_total,0 realtime_total,0 international_total,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_empty_info 
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,ifnull(realtime_total,0) realtime_total,0 international_total,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_realtime_info 
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,0 realtime_total,ifnull(international_total,0) international_total ,0 directCommonTotal,0 lineDirectTotal
+			from oem_cust_daily_international_info  
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+			union all 
+			SELECT day_int,agent_id,customer_id,0 empty_total,0 realtime_total,0 international_total ,if(product_type != 'line',ifnull(direct_total,0),0) directCommonTotal,
+						if(product_type = 'line',ifnull(direct_total,0),0) lineDirectTotal
+			from oem_cust_daily_direct_info  
+			where day_int >= #{startTime} AND day_int <= #{endTime}
+		) a  ]]>
+		INNER JOIN customer cu on cu.id = a.customer_id
+		<if test="phone != null and phone != ''">
+		        and cu.phone = #{phone}
+		</if>
+		inner join agent ag on ag.id = a.agent_id
+		<if test="agentId != null">
+		        and ag.id = #{agentId}
+		</if>
+    </select>
+
+    <select id="countTotalConsume" resultType="java.util.Map">
+        select sum(empty_total) emptyConsume,sum(realtime_total) realtimeConsume 
+        from oem_cust_daily_empty_info em,oem_cust_daily_realtime_info re
+        <where>
+            <if test="agentId!=null">
+                em.agent_id = #{agentId} and re.agent_id = #{agentId}
+            </if>
+        </where>
+    </select>
+    
+    <select id="countTotalConsumeNew" resultType="java.util.Map">
+        select ifnull(sum(empty_consume),0) emptyConsume,ifnull(sum(realtime_consume),0) realtimeConsume 
+       		,ifnull(sum(international_consume),0) internationalConsume 
+		from oem_agent_daily_info ad
+		where ad.day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and ad.day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01') ]]>
+    </select>
+    
+    <select id="getDeskConsumeByEmpty" resultType="com.cc.oem.modules.agent.model.data.records.DeskConsumeData">
+    	select day_int, ifnull(sum(ifnull(empty_total,0)),0) totalConsume
+    	from oem_cust_daily_empty_info
+    	where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01')]]>
+		<if test="agentId != null">
+			and agent_id = #{agentId}
+		</if>
+		group by day_int
+		order by day_int
+    </select>
+    
+    <select id="getDeskConsumeByRealtime" resultType="com.cc.oem.modules.agent.model.data.records.DeskConsumeData">
+    	select day_int, ifnull(sum(ifnull(realtime_total,0)),0) totalConsume
+    	from oem_cust_daily_realtime_info
+    	where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01')]]>
+		<if test="agentId != null">
+			and agent_id = #{agentId}
+		</if>
+		group by day_int
+		order by day_int
+    </select>
+    
+    <select id="getDeskConsumeByInternational" resultType="com.cc.oem.modules.agent.model.data.records.DeskConsumeData">
+    	select day_int, ifnull(sum(ifnull(international_total,0)),0) totalConsume
+    	from oem_cust_daily_international_info
+    	where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01')]]>
+		<if test="agentId != null">
+			and agent_id = #{agentId}
+		</if>
+		group by day_int
+		order by day_int
+    </select>
+    
+    <select id="getDeskConsumeByDirectCommon" resultType="com.cc.oem.modules.agent.model.data.records.DeskConsumeData">
+    	select day_int, ifnull(sum(ifnull(direct_total,0)),0) totalConsume
+    	from oem_cust_daily_direct_info
+    	where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01')]]>
+		and product_type in ('viber','zalo','botim')
+		<if test="agentId != null">
+			and agent_id = #{agentId}
+		</if>
+		group by day_int
+		order by day_int
+    </select>
+    
+    <select id="getDeskConsumeByLineDirect" resultType="com.cc.oem.modules.agent.model.data.records.DeskConsumeData">
+    	select day_int, ifnull(sum(ifnull(direct_total,0)),0) totalConsume
+    	from oem_cust_daily_direct_info
+    	where day_int >= concat(REPLACE(DATE_FORMAT(CURRENT_DATE(),'%Y-%m'),'-',''),'01')
+		<![CDATA[ and day_int < concat(REPLACE(DATE_FORMAT(DATE_ADD(CURRENT_DATE(),INTERVAL 1 month),'%Y-%m'),'-',''),'01')]]>
+		and product_type = 'line'
+		<if test="agentId != null">
+			and agent_id = #{agentId}
+		</if>
+		group by day_int
+		order by day_int
+    </select>
+</mapper>

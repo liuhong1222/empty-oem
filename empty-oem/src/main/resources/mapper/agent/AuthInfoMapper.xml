@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AuthInfoMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, customer_id, id_card_front_path, id_card_back_path, id_card_name, id_card_number, id_card_address, id_card_expire_start_time, id_card_expire_end_time, email, business_license_path, company_name, company_address, business_license_number, legal_person, business_license_expire_start_time, business_license_expire_end_time, business_scope, remark, version, create_time, update_time
+    </sql>
+
+    <select id="getCustomerExtById" resultType="com.cc.oem.modules.agent.model.data.records.CustomerExtQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_ext where id = #{id}
+    </select>
+    
+    <delete id="deleteOne">
+    	delete from customer_ext where id = #{id}
+    </delete>
+
+    <select id="getCustomerVerifyPageList" resultType="com.cc.oem.modules.agent.entity.records.CustomerVerifyQueryVo">
+        select e.id,
+        e.customer_id,
+        e.id_card_front_path,
+        e.id_card_back_path,
+        e.id_card_name,
+        e.id_card_number,
+        e.id_card_address,
+        e.id_card_expire_start_time,
+        e.id_card_expire_end_time,
+        e.email,
+        e.business_license_path,
+        e.company_name,
+        e.company_address,
+        e.business_license_number,
+        e.legal_person,
+        e.business_license_expire_start_time,
+        e.business_license_expire_end_time,
+        e.business_scope,
+        e.remark,
+        e.version,
+        e.create_time,
+        e.update_time,
+        c.phone,
+        c.state,
+        c.agent_id,
+        c.customer_type
+        from customer_ext e
+        inner join customer c on e.customer_id = c.id
+        <where>
+            <if test="agentId != null">
+                and c.agent_id = #{agentId}
+            </if>
+        <if test="startTime != null">
+            and e.create_time >= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and e.create_time &lt;= #{endTime}
+        </if>
+        <if test="phone != null and phone != ''">
+            and c.phone like concat('%', #{phone}, '%')
+        </if>
+        <if test="companyName != null and companyName != ''">
+            and (e.company_name like concat('%', #{companyName}, '%') or
+                e.id_card_name like concat('%', #{companyName}, '%'))
+        </if>
+        <if test="state != null">
+            and c.state = #{state}
+        </if>
+    </where>
+
+        order by e.update_time desc
+    </select>
+
+    <update id="auditCustomerExtState">
+        update customer set state = #{state},update_time = now()
+        where customer.id = #{id}
+    </update>
+    
+    <update id="auditCustomerBackState">
+        update customer 
+        set state = 0,customer_type = 9,update_time = now()
+        where customer.id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.records.CustConsumeMapper">
+
+    <select id="queryTodayConsumeData" resultType="com.cc.oem.modules.agent.model.data.records.ConsumeData">
+        select sum(consume_number) consumeNumber,category from customer_consume
+        <where>
+            consume_type = 1
+            <![CDATA[and update_time >= #{timeData.startTime} and update_time <=#{timeData.endTime}]]>
+        </where>
+        group by category
+    </select>
+
+    <select id="queryTodayConsumeDataOfAgent" resultType="com.cc.oem.modules.agent.model.data.records.ConsumeData">
+        select sum(ifnull(consume_number,0)) consumeNumber,category from customer_consume
+        <where>
+            consume_type = 1
+            <![CDATA[and update_time >= #{timeData.startTime} and update_time <=#{timeData.endTime}]]>
+            and agent_id = #{agentId}
+        </where>
+        group by category
+    </select>
+
+
+</mapper>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.records.RealtimeCheckMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, agent_id, agent_name, customer_id, name, size, normal, empty, on_call, online_but_not_available, shutdown,
+        call_transfer, suspected_shutdown, service_suspended, number_portability, unknown, illegal_number, ifnull(total_number,0) totalNumber,
+        file_url, status, check_type, retry_count, deleted, md5, line, send_count, remark, version, create_time,
+        update_time, exception_fail_count
+    </sql>
+
+    <select id="getRealtimeCheckById" resultType="com.cc.oem.modules.agent.model.data.records.RealtimeCheckQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from realtime_check where id = #{id}
+    </select>
+
+    <select id="getRealtimeCheckPageList" resultType="com.cc.oem.modules.agent.model.data.records.RealtimeCheckQueryVo">
+        select
+        e.id, e.agent_id, e.agent_name, e.customer_id, e.name, e.size, e.normal, e.empty,
+        e.on_call,
+        e.online_but_not_available, e.shutdown, e.call_transfer, e.suspected_shutdown, e.service_suspended,
+        e.number_portability,
+        e.unknown, e.illegal_number, e.total_number, e.file_url, e.status, e.check_type, e.retry_count, e.deleted,
+        e.md5,
+        e.line, e.send_count, e.remark, e.version, e.create_time, e.update_time, e.exception_fail_count,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN c.customer_type = 0 THEN ext.id_card_name ELSE c.name END as customerName ,c.phone
+        from realtime_check e
+        left join customer c on e.customer_id= c.id
+        left join customer_ext ext on ext.customer_id = e.customer_id
+        <where>
+            e.status = 9 and file_url !='' and file_url is not null
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+
+    <select id="getRealtimeCheckApiList" resultType="com.cc.oem.modules.agent.model.data.records.RealtimeCheckQueryVo">
+        select
+        e.id, e.agent_id, e.agent_name, e.customer_id, e.name, e.size, e.normal, e.empty,
+        e.on_call,
+        e.online_but_not_available, e.shutdown, e.call_transfer, e.suspected_shutdown, e.service_suspended,
+        e.number_portability,
+        e.unknown, e.illegal_number, e.total_number, e.file_url, e.status, e.check_type, e.retry_count, e.deleted,
+        e.md5,
+        e.line, e.send_count, e.remark, e.version, e.create_time, e.update_time, e.exception_fail_count,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN c.customer_type = 0 THEN ext.id_card_name ELSE c.name END as customerName, c.phone
+        from realtime_check e
+        left join customer c on e.customer_id= c.id
+        left join customer_ext ext on ext.customer_id = e.customer_id
+        <where>
+            e.status = 9 and (file_url is null or file_url ='')
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getRealtimeTotal" resultType="com.cc.oem.modules.agent.model.data.records.RealtimeCheckQueryVo">
+        select sum(total_number) total_number from realtime_check e
+        left join customer c on e.customer_id= c.id
+        <where>
+            e.status = 9 and file_url !='' and file_url is not null
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="getRealtimeApiTotal" resultType="com.cc.oem.modules.agent.model.data.records.RealtimeCheckQueryVo">
+        select sum(total_number) total_number from realtime_check e
+        left join customer c on e.customer_id= c.id
+        <where>
+            e.status = 9 and (file_url is null or file_url ='')
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and e.agent_id = #{param.agentId}
+                </if>
+                <if test="param.agentName != null and param.agentName != ''">
+                    and e.agent_name like concat('%', #{param.agentName}, '%')
+                </if>
+                <if test="param.phone != null and param.phone != ''">
+                    and c.phone like concat(#{param.phone}, '%')
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and e.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and e.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.custList != null">
+                    and e.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

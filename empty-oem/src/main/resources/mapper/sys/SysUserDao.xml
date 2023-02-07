@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cc.oem.modules.sys.dao.SysUserDao">
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user ur
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id
+		where ur.id = #{id}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user ur
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+		where ur.id = #{id}
+	</select>
+	
+	<select id="queryByUserName" resultType="com.cc.oem.modules.sys.entity.SysUserEntity">
+		select * from sys_user where username = #{username}
+	</select>
+
+	<update id="updateUserNameAndMobileByUserId" parameterType="HashMap">
+    update sys_user
+    set username = #{username},phone = #{mobile},update_time=now()
+    where id = #{userId}
+  </update>
+
+  <update id="updateSlaverSysUserByUserId" parameterType="HashMap">
+    update sys_user
+    set username = #{username},phone = #{mobile},email = #{email},update_time=now()
+    where id = #{id}
+  </update>
+
+  <update id="updatePasswordByUserId" parameterType="HashMap">
+    update sys_user
+    set password = #{password},update_time=now()
+    where id = #{id}
+  </update>
+
+	<update id="updateRealNameAndEmailByUserId" parameterType="HashMap">
+    update sys_user
+    set email = #{email},update_time=now()
+    where id = #{id}
+  </update>
+
+	<update id="updateEmailByUserId" parameterType="HashMap">
+    update sys_user
+    set email = #{email},update_time=now()
+    where id = #{userId}
+  </update>
+
+	<update id="updateMobileByUserId" parameterType="HashMap">
+		update sys_user
+		set phone = #{mobile},update_time=now()
+		where id = #{userId}
+	</update>
+
+	<select id="queryByUserMobile" resultType="com.cc.oem.modules.sys.entity.SysUserEntity">
+		select * from sys_user where phone = #{mobile}
+	</select>
+
+	<select id="queryListByUserMobile" resultType="com.cc.oem.modules.sys.entity.SysUserEntity">
+		select * from sys_user where phone = #{mobile}
+	</select>
+
+	<update id="disableByUserId">
+		update sys_user
+		set state=0
+		where id = #{id}
+	</update>
+
+    <update id="enableByUserId" parameterType="HashMap">
+		update sys_user
+		set state=1
+		where id = #{userId}
+	</update>
+
+	<select id="queryByAgentId" resultType="com.cc.oem.modules.sys.entity.SysUserEntity">
+		select * from sys_user where agent_id = #{agentId}
+	</select>
+
+	<insert id="insertEntity">
+		insert into sys_user
+		(id, username, nickname, password, salt, phone, gender, head, remark, state, agent_id, role_id, deleted, version, create_time, update_time, email)
+		values (
+		id
+		)
+	</insert>
+
+	<select id="queryAgentAccountList" resultType="com.cc.oem.modules.sys.vo.data.AgentAccountData">
+		select sys.*,agent.company_name,agent.linkman_name
+		from sys_user sys left join agent on sys.agent_id = agent.id
+		<where>
+			role_id = 2
+			<if test="agentId!=null">
+				and agent_id = #{agentId}
+			</if>
+			<if test="phone!=null">
+				and phone like concat('%',#{phone},'%')
+			</if>
+		</where>
+		order by sys.create_time desc
+	</select>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.AlipayLogMapper">
+    <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.AlipayLog">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="trad_no" jdbcType="VARCHAR" property="tradNo"/>
+        <result column="request_data" jdbcType="VARCHAR" property="requestData"/>
+        <result column="success_flag" jdbcType="INTEGER" property="successFlag"/>
+        <result column="response_data" jdbcType="VARCHAR" property="responseData"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, order_no, trad_no, request_data, success_flag, response_data, type, create_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from agent_alipay_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from agent_alipay_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.AlipayLog">
+    insert into agent_alipay_log (id, order_no, trad_no, 
+      request_data, success_flag, response_data, 
+      type, create_time)
+    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{tradNo,jdbcType=VARCHAR}, 
+      #{requestData,jdbcType=VARCHAR}, #{successFlag,jdbcType=INTEGER}, #{responseData,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.cc.oem.modules.agent.entity.AlipayLog">
+        insert into agent_alipay_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="tradNo != null">
+                trad_no,
+            </if>
+            <if test="requestData != null">
+                request_data,
+            </if>
+            <if test="successFlag != null">
+                success_flag,
+            </if>
+            <if test="responseData != null">
+                response_data,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradNo != null">
+                #{tradNo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestData != null">
+                #{requestData,jdbcType=VARCHAR},
+            </if>
+            <if test="successFlag != null">
+                #{successFlag,jdbcType=INTEGER},
+            </if>
+            <if test="responseData != null">
+                #{responseData,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cc.oem.modules.agent.entity.AlipayLog">
+        update agent_alipay_log
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="tradNo != null">
+                trad_no = #{tradNo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestData != null">
+                request_data = #{requestData,jdbcType=VARCHAR},
+            </if>
+            <if test="successFlag != null">
+                success_flag = #{successFlag,jdbcType=INTEGER},
+            </if>
+            <if test="responseData != null">
+                response_data = #{responseData,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.AlipayLog">
+    update agent_alipay_log
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      trad_no = #{tradNo,jdbcType=VARCHAR},
+      request_data = #{requestData,jdbcType=VARCHAR},
+      success_flag = #{successFlag,jdbcType=INTEGER},
+      response_data = #{responseData,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

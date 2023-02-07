@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.BusinessLicenceInfoMapper">
+    <resultMap id="BaseResultMap" type="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="cre_user_id" jdbcType="INTEGER" property="creUserId"/>
+        <result column="regnum" jdbcType="VARCHAR" property="regnum"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="person" jdbcType="VARCHAR" property="person"/>
+        <result column="effectDate" jdbcType="VARCHAR" property="effectdate"/>
+        <result column="expireDate" jdbcType="VARCHAR" property="expiredate"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="captial" jdbcType="VARCHAR" property="captial"/>
+        <result column="elbem" jdbcType="VARCHAR" property="elbem"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="stamp" jdbcType="VARCHAR" property="stamp"/>
+        <result column="reg_authority" jdbcType="VARCHAR" property="regAuthority"/>
+        <result column="qrcode" jdbcType="VARCHAR" property="qrcode"/>
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl"/>
+        <result column="flag" jdbcType="INTEGER" property="flag"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createby"/>
+        <result column="lastTime" jdbcType="TIMESTAMP" property="lasttime"/>
+        <result column="lastRepair" jdbcType="VARCHAR" property="lastrepair"/>
+        <result column="legal_person_id" jdbcType="VARCHAR" property="legalPersonId"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+        <result column="business" jdbcType="LONGVARCHAR" property="business"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, cre_user_id, regnum, name, person, effectDate, expireDate, address, captial, 
+    elbem, title, stamp, reg_authority, qrcode, picture_url, flag, createTime, createBy, 
+    lastTime, lastRepair, legal_person_id
+  </sql>
+    <sql id="Blob_Column_List">
+    business
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from businesslicenceinfo
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from businesslicenceinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+    insert into businesslicenceinfo (id, cre_user_id, regnum, 
+      name, person, effectDate, 
+      expireDate, address, captial, 
+      elbem, title, stamp, 
+      reg_authority, qrcode, picture_url, 
+      flag, createTime, createBy, 
+      lastTime, lastRepair, legal_person_id, 
+      business)
+    values (#{id,jdbcType=INTEGER}, #{creUserId,jdbcType=INTEGER}, #{regnum,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{effectdate,jdbcType=DATE},
+      #{expiredate,jdbcType=DATE}, #{address,jdbcType=VARCHAR}, #{captial,jdbcType=VARCHAR}, 
+      #{elbem,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{stamp,jdbcType=VARCHAR}, 
+      #{regAuthority,jdbcType=VARCHAR}, #{qrcode,jdbcType=VARCHAR}, #{pictureUrl,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createby,jdbcType=VARCHAR}, 
+      #{lasttime,jdbcType=TIMESTAMP}, #{lastrepair,jdbcType=VARCHAR}, #{legalPersonId,jdbcType=VARCHAR}, 
+      #{business,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+        insert into businesslicenceinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="creUserId != null">
+                cre_user_id,
+            </if>
+            <if test="regnum != null">
+                regnum,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="person != null">
+                person,
+            </if>
+            <if test="effectdate != null">
+                effectDate,
+            </if>
+            <if test="expiredate != null">
+                expireDate,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="captial != null">
+                captial,
+            </if>
+            <if test="elbem != null">
+                elbem,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="stamp != null">
+                stamp,
+            </if>
+            <if test="regAuthority != null">
+                reg_authority,
+            </if>
+            <if test="qrcode != null">
+                qrcode,
+            </if>
+            <if test="pictureUrl != null">
+                picture_url,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="createtime != null">
+                createTime,
+            </if>
+            <if test="createby != null">
+                createBy,
+            </if>
+            <if test="lasttime != null">
+                lastTime,
+            </if>
+            <if test="lastrepair != null">
+                lastRepair,
+            </if>
+            <if test="legalPersonId != null">
+                legal_person_id,
+            </if>
+            <if test="business != null">
+                business,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="creUserId != null">
+                #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="regnum != null">
+                #{regnum,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="person != null">
+                #{person,jdbcType=VARCHAR},
+            </if>
+            <if test="effectdate != null">
+                #{effectdate,jdbcType=DATE},
+            </if>
+            <if test="expiredate != null">
+                #{expiredate,jdbcType=DATE},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="captial != null">
+                #{captial,jdbcType=VARCHAR},
+            </if>
+            <if test="elbem != null">
+                #{elbem,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="stamp != null">
+                #{stamp,jdbcType=VARCHAR},
+            </if>
+            <if test="regAuthority != null">
+                #{regAuthority,jdbcType=VARCHAR},
+            </if>
+            <if test="qrcode != null">
+                #{qrcode,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createby != null">
+                #{createby,jdbcType=VARCHAR},
+            </if>
+            <if test="lasttime != null">
+                #{lasttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastrepair != null">
+                #{lastrepair,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonId != null">
+                #{legalPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="business != null">
+                #{business,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+        update businesslicenceinfo
+        <set>
+            <if test="creUserId != null">
+                cre_user_id = #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="regnum != null">
+                regnum = #{regnum,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="person != null">
+                person = #{person,jdbcType=VARCHAR},
+            </if>
+            <if test="effectdate != null">
+                effectDate = #{effectdate,jdbcType=DATE},
+            </if>
+            <if test="expiredate != null">
+                expireDate = #{expiredate,jdbcType=DATE},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="captial != null">
+                captial = #{captial,jdbcType=VARCHAR},
+            </if>
+            <if test="elbem != null">
+                elbem = #{elbem,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="stamp != null">
+                stamp = #{stamp,jdbcType=VARCHAR},
+            </if>
+            <if test="regAuthority != null">
+                reg_authority = #{regAuthority,jdbcType=VARCHAR},
+            </if>
+            <if test="qrcode != null">
+                qrcode = #{qrcode,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                picture_url = #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                createTime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createby != null">
+                createBy = #{createby,jdbcType=VARCHAR},
+            </if>
+            <if test="lasttime != null">
+                lastTime = #{lasttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastrepair != null">
+                lastRepair = #{lastrepair,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonId != null">
+                legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="business != null">
+                business = #{business,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs"
+            parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+    update businesslicenceinfo
+    set cre_user_id = #{creUserId,jdbcType=INTEGER},
+      regnum = #{regnum,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      person = #{person,jdbcType=VARCHAR},
+      effectDate = #{effectdate,jdbcType=DATE},
+      expireDate = #{expiredate,jdbcType=DATE},
+      address = #{address,jdbcType=VARCHAR},
+      captial = #{captial,jdbcType=VARCHAR},
+      elbem = #{elbem,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      stamp = #{stamp,jdbcType=VARCHAR},
+      reg_authority = #{regAuthority,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      createBy = #{createby,jdbcType=VARCHAR},
+      lastTime = #{lasttime,jdbcType=TIMESTAMP},
+      lastRepair = #{lastrepair,jdbcType=VARCHAR},
+      legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+      business = #{business,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+    update businesslicenceinfo
+    set cre_user_id = #{creUserId,jdbcType=INTEGER},
+      regnum = #{regnum,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      person = #{person,jdbcType=VARCHAR},
+      effectDate = #{effectdate,jdbcType=DATE},
+      expireDate = #{expiredate,jdbcType=DATE},
+      address = #{address,jdbcType=VARCHAR},
+      captial = #{captial,jdbcType=VARCHAR},
+      elbem = #{elbem,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      stamp = #{stamp,jdbcType=VARCHAR},
+      reg_authority = #{regAuthority,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      createBy = #{createby,jdbcType=VARCHAR},
+      lastTime = #{lasttime,jdbcType=TIMESTAMP},
+      lastRepair = #{lastrepair,jdbcType=VARCHAR},
+      legal_person_id = #{legalPersonId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        SELECT
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from businesslicenceinfo
+        where cre_user_id = #{creUserId} and flag=0
+        order by id DESC
+        limit 1
+    </select>
+
+    <update id="updateByIdAndCreUserIdSelective"
+            parameterType="com.cc.oem.modules.agent.entity.BusinessLicenceInfo">
+        update businesslicenceinfo
+        <set>
+            <if test="creUserId != null">
+                cre_user_id = #{creUserId,jdbcType=INTEGER},
+            </if>
+            <if test="regnum != null">
+                regnum = #{regnum,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="person != null">
+                person = #{person,jdbcType=VARCHAR},
+            </if>
+            <if test="effectdate != null">
+                effectDate = #{effectdate,jdbcType=DATE},
+            </if>
+            <if test="expiredate != null">
+                expireDate = #{expiredate,jdbcType=DATE},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="captial != null">
+                captial = #{captial,jdbcType=VARCHAR},
+            </if>
+            <if test="elbem != null">
+                elbem = #{elbem,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="stamp != null">
+                stamp = #{stamp,jdbcType=VARCHAR},
+            </if>
+            <if test="regAuthority != null">
+                reg_authority = #{regAuthority,jdbcType=VARCHAR},
+            </if>
+            <if test="qrcode != null">
+                qrcode = #{qrcode,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+            lastTime = now(),
+            <if test="lastrepair != null">
+                lastRepair = #{lastrepair,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonId != null">
+                legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+            </if>
+            <if test="business != null">
+                business = #{business,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER} and cre_user_id = #{creUserId,jdbcType=INTEGER}
+    </update>
+
+
+
+
+    <select id="queryOneByCreUserId" parameterType="HashMap" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from businesslicenceinfo
+        where cre_user_id = #{creUserId}
+        order by flag desc,id desc
+        limit 1
+    </select>
+
+
+</mapper>

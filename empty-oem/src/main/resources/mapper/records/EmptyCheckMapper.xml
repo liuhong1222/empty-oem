@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.oem.modules.agent.dao.records.EmptyCheckMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, agent_id, agent_name, customer_id, name, size, real_number,unknown_number, silent_number, empty_number,
+        risk_number, illegal_number, total_number, file_url, status, send_id, cache_finish, retry_count, remark, version,
+        create_time, update_time, check_type, line, md5, send_count, category
+    </sql>
+
+    <select id="getEmptyCheckById" resultType="com.cc.oem.modules.agent.model.data.records.EmptyCheckQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from empty_check where id = #{id}
+    </select>
+
+    <!-- 实际查询结果为提交文件进行检测的数据 -->
+    <select id="getEmptyCheckPageList" resultType="com.cc.oem.modules.agent.model.data.records.EmptyCheckQueryVo">
+        select
+		ch.id, cu.agent_id,a.company_name agent_name, ch.customer_id,
+		CASE WHEN  cu.customer_type = 1 THEN ext.company_name
+		WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as customerName,
+		REPLACE(ch.zip_name,'.zip','') `name`,ch.zip_size size, 
+		ifnull(ch.real_number,0) real_number,ifnull(ch.silent_number,0) silent_number, ifnull(ch.empty_number,0) empty_number,
+		ifnull(ch.risk_number,0) risk_number, ifnull(ch.total_number,0) totalNumber, ch.create_time, cu.phone
+		from cvs_file_path ch
+		inner join customer cu on cu.id = ch.customer_id
+		INNER JOIN agent a on a.id = cu.agent_id
+		left join customer_ext ext on ext.customer_id = cu.id
+        <where>
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    cu.agent_id = #{param.agentId}
+                </if>
+                <if test="param.customerId != null">
+                    and ch.customer_id = #{param.customerId}
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and ch.create_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and ch.create_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.phone != null">
+                    and cu.phone like concat('%',#{param.phone},'%')
+                </if>
+                <if test="param.custList != null">
+                    and ch.customer_id in(
+                        <foreach collection="param.custList" item="item" separator=",">
+                            #{item}
+                        </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+        order by ch.id desc
+    </select>
+
+    <!-- 查询结果为不提交文件的空号检测记录-->
+    <select id="getEmptyCheckApiList" resultType="com.cc.oem.modules.agent.model.data.records.EmptyCheckQueryVo">
+        select
+        ch.id, ch.agent_id, ch.agent_name, ch.customer_id,
+        CASE WHEN  customer_type = 1 THEN ext.company_name
+        WHEN cu.customer_type = 0 THEN ext.id_card_name ELSE cu.name END as customerName,
+        ch.name,
+        ch.size, ch.real_number,ifnull(ch.unknown_number,0) unknownNumber, ch.silent_number, ch.empty_number,
+        ch.risk_number, ch.illegal_number, ifnull(ch.total_number,0) totalNumber, ch.file_url, ch.status, ch.send_id, ch.cache_finish, ch.retry_count, ch.remark,
+        ch.create_time, ch.update_time, ch.check_type, ifnull(ch.line,0) line, ch.md5, ch.send_count, ch.category,cu.phone
+        from empty_check ch
+        inner join empty_check a on a.id = ch.id and (a.status = 9 or a.status=11)
+        inner join customer cu on cu.id = ch.customer_id
+        left join customer_ext ext on ext.customer_id = cu.id
+        <where>
+            (ch.file_url = '' or ch.file_url is null)
+            <if test="param != null">
+                <if test="param.customerId != null">
+                    and ch.customer_id = #{param.customerId}
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and ch.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and ch.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.phone != null">
+                    and cu.phone like concat('%',#{param.phone},'%')
+                </if>
+                <if test="param.agentId != null">
+                    and ch.agent_id = #{param.agentId}
+                </if>
+                <if test="param.custList != null">
+                    and ch.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+        order by ch.create_time desc
+    </select>
+
+    <select id="getEmptyTotal" resultType="com.cc.oem.modules.agent.model.data.records.EmptyCheckQueryVo">
+        select sum(ifnull(total_number,0)) total_number
+        from cvs_file_path ch
+		inner join customer cu on cu.id = ch.customer_id
+		INNER JOIN agent a on a.id = cu.agent_id
+        <where>
+            <if test="param != null">
+                <if test="param.agentId != null">
+                    and cu.agent_id = #{param.agentId}
+                </if>
+                <if test="param.customerId != null">
+                    and ch.customer_id = #{param.customerId}
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and ch.create_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and ch.create_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.phone != null">
+                    and cu.phone like concat('%',#{param.phone},'%')
+                </if>
+                <if test="param.custList != null">
+                    and ch.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="getEmptyApiTotal" resultType="com.cc.oem.modules.agent.model.data.records.EmptyCheckQueryVo">
+        select sum(ifnull(line,0)) line,sum(ifnull(unknown_number,0)) unknown_number,sum(ifnull(total_number,0)) total_number
+        from empty_check ch inner join customer cu on cu.id = ch.customer_id
+        <where>
+            (ch.status = 9 or ch.status=11)
+            and (ch.file_url = '' or ch.file_url is null)
+            <if test="param != null">
+                <if test="param.customerId != null">
+                    and ch.customer_id = #{param.customerId}
+                </if>
+                <if test="param.createTimeFrom != null">
+                    and ch.update_time >= #{param.createTimeFrom}
+                </if>
+                <if test="param.createTimeEnd != null">
+                    and ch.update_time &lt;= #{param.createTimeEnd}
+                </if>
+                <if test="param.agentId != null">
+                    and ch.agent_id = #{param.agentId}
+                </if>
+                <if test="param.phone != null">
+                    and cu.phone like concat('%',#{param.phone},'%')
+                </if>
+                <if test="param.custList != null">
+                    and ch.customer_id in(
+                    <foreach collection="param.custList" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>
